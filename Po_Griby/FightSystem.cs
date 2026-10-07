@@ -23,7 +23,7 @@ class FightSystem
             if (!player.IsAlive) break;
 
             isPlayerTurn = !isPlayerTurn; // Перехід ходу
-            Console.WriteLine("\n[Натисніть будь-яку клавішу для наступного ходу...]");
+            Console.WriteLine("\n[Тицьніть будь-яку клавішу для наступного ходу...]");
             Console.ReadKey(true);
             Console.Clear();
         }
@@ -32,7 +32,7 @@ class FightSystem
         if (player.IsAlive)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\n=== ПЕРЕМОГА! Ви здолали {enemy.Name}! ===");
+            Console.WriteLine($"\n=== Победа! Ви здолали {enemy.Name}! ===");
             Console.ResetColor();
             Console.WriteLine("Натисніть клавішу для повернення на карту...");
             Console.ReadKey(true);
@@ -41,7 +41,7 @@ class FightSystem
         else
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"\n=== ПОРАЗКА! Вас здолав {enemy.Name}... ===");
+            Console.WriteLine($"\n=== Програш! Вас здолав {enemy.Name}... ===");
             Console.ResetColor();
             return false;
         }
