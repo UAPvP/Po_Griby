@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.VisualBasic;
+
 class MapCreationException : Exception
 {
     public MapCreationException(string message) : base(message)
@@ -9,7 +11,7 @@ struct Vector2D
 {
     public int x, y;
 }
-class Entity
+abstract class Entity
 {
     protected Vector2D cords;
     protected char Symbol;
@@ -26,6 +28,19 @@ class Entity
     {
         return cords;
     }
+
+    public abstract void Interaction(Player target);
+}
+
+class Character : Entity
+{
+    protected int Health;      //
+    protected int ATK_Speed;   // для системи файтів Андрія!!!!
+    protected int ATK_Damage;  //
+    protected int DEF_Speed;   //
+    protected int DEF_Shield;  //
+
+    public Character() {}
     public void MoveUp()
     {
         cords.x -= 1;
@@ -42,19 +57,13 @@ class Entity
     {
         cords.y += 1;
     }
+    public override void Interaction(Player target) { }
 }
 
-class Player : Entity
+class Player : Character
 {
-    int Health;      //
-    int ATK_Speed;   // для системи файтів Андрія!!!!
-    int ATK_Damage;  //
-    int DEF_Speed;   //
-    int DEF_Shield;  //
-
     public Player()
     {
-
         string file = "player.txt";
 
         if (!File.Exists(file))
@@ -102,7 +111,11 @@ class Player : Entity
             }
         }
     }
+    public void Interaction() { }
+    public void Interact(Entity target) {}
 }
+
+
 
 class Map
 {
@@ -281,4 +294,3 @@ class MapFile
         }
     }
 }
-    
