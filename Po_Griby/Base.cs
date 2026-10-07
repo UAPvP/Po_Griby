@@ -46,15 +46,17 @@ class Entity
 
 class Player : Entity
 {
-    int Health;      //
-    int ATK_Speed;   // для системи файтів Андрія!!!!
-    int ATK_Damage;  //
-    int DEF_Speed;   //
-    int DEF_Shield;  //
+    public int Health { get; set; }
+    public int MaxHealth { get; private set; } = 20;
+    public int ATK_Speed { get; private set; }
+    public int ATK_Damage { get; private set; }
+    public int DEF_Speed { get; private set; }
+    public int DEF_Shield { get; private set; }
+
+    public bool IsAlive => Health > 0;
 
     public Player()
     {
-
         string file = "player.txt";
 
         if (!File.Exists(file))
@@ -65,7 +67,7 @@ class Player : Entity
                 "ATK_Speed=3\n" +
                 "ATK_Damage=5\n" +
                 "DEF_Speed=2\n" +
-                "DEF_Shield=0");
+                "DEF_Shield=1");
         }
 
         string[] lines = File.ReadAllLines(file);
@@ -76,31 +78,21 @@ class Player : Entity
 
             switch (parts[0])
             {
-                case "Symbol":
-                    Symbol = char.Parse(parts[1]);
-                    break;
-
-                case "Health":
-                    Health = int.Parse(parts[1]);
-                    break;
-
-                case "ATK_Speed":
-                    ATK_Speed = int.Parse(parts[1]);
-                    break;
-
-                case "ATK_Damage":
-                    ATK_Damage = int.Parse(parts[1]);
-                    break;
-
-                case "DEF_Speed":
-                    DEF_Speed = int.Parse(parts[1]);
-                    break;
-
-                case "DEF_Shield":
-                    DEF_Shield = int.Parse(parts[1]);
-                    break;
+                case "Symbol": Symbol = char.Parse(parts[1]); break;
+                case "Health": Health = MaxHealth = int.Parse(parts[1]); break;
+                case "ATK_Speed": ATK_Speed = int.Parse(parts[1]); break;
+                case "ATK_Damage": ATK_Damage = int.Parse(parts[1]); break;
+                case "DEF_Speed": DEF_Speed = int.Parse(parts[1]); break;
+                case "DEF_Shield": DEF_Shield = int.Parse(parts[1]); break;
             }
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        int actualDamage = Math.Max(1, damage - DEF_Shield);
+        Health -= actualDamage;
+        if (Health < 0) Health = 0;
     }
 }
 
