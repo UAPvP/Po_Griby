@@ -1,6 +1,6 @@
 ﻿namespace Po_Griby.MapSystem
 {
-    class TileInfo
+    public class TileInfo
     {
         public ConsoleColor Color { get; private set; }
         public bool IsWalkable { get; private set; }

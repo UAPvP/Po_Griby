@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Po_Griby.MapSystem
 {
-    class TileMap
+    public class TileMap
     {
         private char[,] map;
         private int width;
@@ -34,7 +34,7 @@ namespace Po_Griby.MapSystem
                         }
                         else
                         {
-                            map[i, j] = ' ';
+                            map[i, j] = '.';
                         }
                     }
                 }
@@ -42,6 +42,7 @@ namespace Po_Griby.MapSystem
             else
             {
                 CreateEmptyTileMap(32, 32);
+                SaveToFile(filePath);
             }
         }
         public TileMap(int height, int width)
@@ -55,6 +56,7 @@ namespace Po_Griby.MapSystem
         {
             this.height = height;
             this.width = width;
+            map = new char[height, width];
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
@@ -62,7 +64,7 @@ namespace Po_Griby.MapSystem
                     if (i == 0 || i == height - 1 || j == 0 || j == width - 1)
                         map[i, j] = '#';
                     else
-                        map[i, j] = ' ';
+                        map[i, j] = '.';
                 }
             }
         }
@@ -84,7 +86,26 @@ namespace Po_Griby.MapSystem
         {
             return map;
         }
+
+        private void SaveToFile(string filePath)
+        {
+            string[] lines = new string[height];
+
+            for (int y = 0; y < height; y++)
+            {
+                char[] row = new char[width];
+
+                for (int x = 0; x < width; x++)
+                    row[x] = map[y, x];
+
+                lines[y] = new string(row);
+            }
+
+            File.WriteAllLines(filePath, lines);
+        }
     }
 }
+
+
 
 

@@ -34,21 +34,32 @@ namespace Po_Griby.Gameplay
     public abstract class Character : Entity
     {
         protected Character(char symbol, Vector2D position) : base(symbol, position) { }
-        public void MoveUp()
+
+        public bool TryMove(FinalMap map,Vector2D position)
         {
-            Position += new Vector2D(-1, 0);
+            if (map.isPassable(position))
+            {
+                Position = position;
+                return true;
+            }
+            return false;
+
         }
-        public void MoveDown()
+        public bool MoveUp(FinalMap map)
         {
-            Position += new Vector2D(1, 0);
+            return TryMove(map, Position + new Vector2D(0, -1));
         }
-        public void MoveLeft()
+        public bool MoveDown(FinalMap map)
         {
-            Position += new Vector2D(0, -1);
+            return TryMove(map, Position + new Vector2D(0, 1));
         }
-        public void MoveRight()
+        public bool MoveLeft(FinalMap map)
         {
-            Position += new Vector2D(0, 1);
+            return TryMove(map, Position + new Vector2D(-1, 0));
+        }
+        public bool MoveRight(FinalMap map)
+        {
+            return TryMove(map, Position + new Vector2D(1, 0));
         }
         public override void Interact(Player target) { }
     }
@@ -67,7 +78,6 @@ namespace Po_Griby.Gameplay
             if (!File.Exists(file))
             {
                 File.WriteAllText(file,
-                    "Symbol=A\n" +
                     "Health=20\n" +
                     "AttackSpeed=3\n" +
                     "AttackDamage=5\n" +
@@ -89,10 +99,6 @@ namespace Po_Griby.Gameplay
 
                 switch (key)
                 {
-                    case "Symbol":
-                        Symbol = char.Parse(value);
-                        break;
-
                     case "Health":
                         Health = int.Parse(value);
                         break;
