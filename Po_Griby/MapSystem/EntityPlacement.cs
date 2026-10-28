@@ -36,6 +36,9 @@ namespace Po_Griby.MapSystem
                 case "BasicNPC":
                     return new BasicNPC(Symbol, position, Dialogue ?? string.Empty);
 
+                case "MapChanger":
+                    return new MapChanger(Symbol, position);
+
                 default:
                     throw new InvalidOperationException(
                         $"Невідомий клас сутності: {ClassName}");
@@ -70,6 +73,12 @@ namespace Po_Griby.MapSystem
                     throw new FormatException($"Неправильний символ або формат рядка: {originalLine}");
 
                 char symbol = entry[0].Trim()[0];
+                if (symbol == '#' || symbol == '.' || symbol == 'X')
+                {
+                    throw new FormatException(
+                        $"Символ '{symbol}' зарезервований для шару проходу карти.");
+                }
+
                 string[] parts = entry[1].Split(',', 3);
 
                 if (parts.Length < 2)

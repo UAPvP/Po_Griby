@@ -11,6 +11,8 @@ namespace Po_Griby.MapSystem
         private readonly Dictionary<char, TileInfo> tileDefinitions;
         private readonly Dictionary<char, EntityPlacement> entityDefinitions;
 
+        public string LastMessage { get; private set; } = string.Empty;
+
         public FinalMap(
             string tileMapFilePath,
             string entityMapFilePath,
@@ -35,7 +37,8 @@ namespace Po_Griby.MapSystem
         {
             return tileMap;
         }
-        public bool isPassable(Vector2D position)
+
+        public bool IsTileWalkable(Vector2D position, bool isNPC = false)
         {
             char[,] tiles = tileMap.GetTileMap();
 
@@ -48,13 +51,34 @@ namespace Po_Griby.MapSystem
 
             char tileSymbol = tiles[position.y, position.x];
 
-            if (!tileDefinitions.TryGetValue(tileSymbol, out TileInfo? tileInfo) ||
-                !tileInfo.IsWalkable)
-            {
+            if (!tileDefinitions.TryGetValue(tileSymbol, out TileInfo? tileInfo))
                 return false;
+
+            return isNPC ? tileInfo.IsNPCWalkable : tileInfo.IsWalkable;
+        }
+
+        public Entity? GetEntityAt(Vector2D position)
+        {
+            foreach (Entity entity in entityMap.Entities)
+            {
+                if (entity.Position.x == position.x &&
+                    entity.Position.y == position.y)
+                {
+                    return entity;
+                }
             }
 
-            return FindEntityAt(position.x, position.y) == null;
+            return null;
+        }
+
+        public void SetMessage(string? message)
+        {
+            LastMessage = message ?? string.Empty;
+        }
+
+        public bool isPassable(Vector2D position, bool isNPC = false)
+        {
+            return IsTileWalkable(position, isNPC) && GetEntityAt(position) == null;
         }
         public void Show()
         {
@@ -66,7 +90,7 @@ namespace Po_Griby.MapSystem
             {
                 for (int x = 0; x < width; x++)
                 {
-                    Entity? entity = FindEntityAt(x, y);
+                    Entity? entity = GetEntityAt(new Vector2D(x, y));
 
                     if (entity != null)
                     {
@@ -88,15 +112,5 @@ namespace Po_Griby.MapSystem
             Console.ResetColor();
         }
 
-        private Entity? FindEntityAt(int x, int y)
-        {
-            foreach (Entity entity in entityMap.Entities)
-            {
-                if (entity.Position.x == x && entity.Position.y == y)
-                    return entity;
-            }
-
-            return null;
-        }
     }
 }

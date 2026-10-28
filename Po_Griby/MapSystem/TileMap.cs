@@ -9,7 +9,7 @@ namespace Po_Griby.MapSystem
 {
     public class TileMap
     {
-        private char[,] map;
+        private char[,] map = new char[0, 0];
         private int width;
         private int height;
 
@@ -71,13 +71,15 @@ namespace Po_Griby.MapSystem
 
         public void LoadTilesFromLines(string[] lines)
         {
-            height = lines.GetLength(0);
-            width = lines.GetLength(1);
+            height = lines.Length;
+            width = height == 0 ? 0 : lines.Max(line => line.Length);
+            map = new char[height, width];
+
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
-                    map[i, j] = lines[i][j];
+                    map[i, j] = j < lines[i].Length ? lines[i][j] : '.';
                 }
             }
         }

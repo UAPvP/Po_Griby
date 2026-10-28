@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,9 +21,7 @@ namespace Po_Griby.MapSystem
             char[,] tiles = tileMap.GetTileMap();
             int height = tiles.GetLength(0);
             int width = tiles.GetLength(1);
-
-            char[,] passabilityLayer =
-                CreatePassabilityLayer(tiles, tileDefinitions);
+            char[,] passabilityLayer = CreatePassabilityLayer(tiles, tileDefinitions);
 
             if (!File.Exists(filePath))
             {
@@ -33,13 +31,12 @@ namespace Po_Griby.MapSystem
             {
                 string[] lines = File.ReadAllLines(filePath);
 
+                // Если сущность находится за границей новой карты, не затираем её молча.
                 for (int y = 0; y < lines.Length; y++)
                 {
                     for (int x = 0; x < lines[y].Length; x++)
                     {
-                        bool outsideMap = y >= height || x >= width;
-
-                        if (outsideMap && IsEntitySymbol(lines[y][x]))
+                        if ((y >= height || x >= width) && IsEntitySymbol(lines[y][x]))
                         {
                             throw new FormatException(
                                 $"Сутність '{lines[y][x]}' розташована за межами карти: ({x}, {y}).");
@@ -59,14 +56,14 @@ namespace Po_Griby.MapSystem
                     for (int x = 0; x < overlapWidth; x++)
                     {
                         char symbol = lines[y][x];
-                        char expectedPassability = passabilityLayer[y, x];
+                        char expected = passabilityLayer[y, x];
 
                         if (IsEntitySymbol(symbol))
                         {
-                            if (expectedPassability == '#')
+                            if (expected == '#')
                             {
                                 throw new FormatException(
-                                    $"Сутність '{symbol}' розташована на непрохідній клітинці ({x}, {y}).");
+                                    $"Сутність '{symbol}' розташована на непрохідному для гравця тайлі ({x}, {y}).");
                             }
 
                             if (!entityDefinitions.ContainsKey(symbol))
@@ -75,19 +72,21 @@ namespace Po_Griby.MapSystem
                                     $"Для символу сутності '{symbol}' немає опису.");
                             }
                         }
-                        else if (symbol != expectedPassability)
+                        else if (symbol != expected)
                         {
+                            // Изменились размеры или проходимость клетки.
                             layerChanged = true;
                         }
                     }
                 }
 
                 if (layerChanged)
-                {
                     SaveLayer(filePath, passabilityLayer);
-                }
             }
+
             string[] finalLines = File.ReadAllLines(filePath);
+
+            EnsurePlayerExists(finalLines, passabilityLayer, entityDefinitions, filePath);
 
             for (int y = 0; y < height; y++)
             {
@@ -99,9 +98,7 @@ namespace Po_Griby.MapSystem
                         continue;
 
                     EntityPlacement definition = entityDefinitions[symbol];
-                    Vector2D position = new Vector2D(x, y);
-
-                    entities.Add(definition.CreateEntity(position));
+                    entities.Add(definition.CreateEntity(new Vector2D(x, y)));
                 }
             }
         }
@@ -126,16 +123,95 @@ namespace Po_Griby.MapSystem
                             $"Для тайлу '{tileSymbol}' не задано опис прохідності.");
                     }
 
-                    layer[y, x] = tileInfo.IsWalkable ? '.' : '#';
+                    if (!tileInfo.IsWalkable)
+                        layer[y, x] = '#';
+                    else if (!tileInfo.IsNPCWalkable)
+                        layer[y, x] = 'X';
+                    else
+                        layer[y, x] = '.';
                 }
             }
 
             return layer;
         }
 
+        private static void EnsurePlayerExists(
+            string[] lines,
+            char[,] passabilityLayer,
+            Dictionary<char, EntityPlacement> entityDefinitions,
+            string filePath)
+        {
+            EntityPlacement? playerDefinition = entityDefinitions.Values
+                .FirstOrDefault(definition => definition.ClassName == "Player");
+
+            if (playerDefinition == null)
+            {
+                throw new FormatException(
+                    "У файлі entity-definitions.txt немає опису сутності класу Player.");
+            }
+
+            foreach (string line in lines)
+            {
+                foreach (char symbol in line)
+                {
+                    if (entityDefinitions.TryGetValue(symbol, out EntityPlacement? definition) &&
+                        definition.ClassName == "Player")
+                    {
+                        return;
+                    }
+                }
+            }
+
+            int height = passabilityLayer.GetLength(0);
+            int width = passabilityLayer.GetLength(1);
+            int centerX = width / 2;
+            int centerY = height / 2;
+
+            if (IsFreePlayerCell(centerX, centerY, lines, passabilityLayer))
+            {
+                PlacePlayer(centerX, centerY, lines, playerDefinition.Symbol);
+                SaveLines(filePath, lines);
+                return;
+            }
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    if (IsFreePlayerCell(x, y, lines, passabilityLayer))
+                    {
+                        PlacePlayer(x, y, lines, playerDefinition.Symbol);
+                        SaveLines(filePath, lines);
+                        return;
+                    }
+                }
+            }
+
+            throw new FormatException("На карті немає вільної прохідної клітинки для гравця.");
+        }
+
+        private static bool IsFreePlayerCell(
+            int x,
+            int y,
+            string[] lines,
+            char[,] passabilityLayer)
+        {
+            if (passabilityLayer[y, x] == '#')
+                return false;
+
+            return !IsEntitySymbol(lines[y][x]);
+        }
+
+        private static void PlacePlayer(int x, int y, string[] lines, char playerSymbol)
+        {
+            char[] row = lines[y].ToCharArray();
+            row[x] = playerSymbol;
+            lines[y] = new string(row);
+        }
+
         private static bool IsEntitySymbol(char symbol)
         {
-            return symbol != '#' && symbol != '.';
+            return symbol != '#' && symbol != '.' && symbol != 'X';
         }
 
         private static void SaveLayer(string filePath, char[,] layer)
@@ -154,6 +230,11 @@ namespace Po_Griby.MapSystem
                 lines[y] = new string(row);
             }
 
+            SaveLines(filePath, lines);
+        }
+
+        private static void SaveLines(string filePath, string[] lines)
+        {
             File.WriteAllLines(filePath, lines);
         }
     }

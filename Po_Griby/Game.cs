@@ -41,6 +41,14 @@ class Program
                 Console.WriteLine();
                 Console.WriteLine("Керування: W — вгору, A — вліво, S — вниз, D — вправо, Q — вихід.");
 
+                int messageWidth = Math.Max(1, Console.WindowWidth - 1);
+                string message = map.LastMessage;
+
+                if (message.Length > messageWidth)
+                    message = message.Substring(0, messageWidth);
+
+                Console.Write(message.PadRight(messageWidth));
+
                 ConsoleKey key = Console.ReadKey(true).Key;
 
                 switch (key)

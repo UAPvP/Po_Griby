@@ -27,23 +27,34 @@ namespace Po_Griby.Gameplay
             Symbol = symbol;
             Position = position;
         }
-        public virtual void Interact(Player player)
+        public virtual string? Interact(Player player)
         {
+            return null;
         }
     }
     public abstract class Character : Entity
     {
         protected Character(char symbol, Vector2D position) : base(symbol, position) { }
 
-        public bool TryMove(FinalMap map,Vector2D position)
+        public bool TryMove(FinalMap map, Vector2D position)
         {
-            if (map.isPassable(position))
-            {
-                Position = position;
-                return true;
-            }
-            return false;
+            bool isNPC = this is not Player;
 
+            if (!map.IsTileWalkable(position, isNPC))
+                return false;
+
+            Entity? entity = map.GetEntityAt(position);
+
+            if (entity != null)
+            {
+                if (this is Player player)
+                    map.SetMessage(entity.Interact(player));
+
+                return false;
+            }
+
+            Position = position;
+            return true;
         }
         public bool MoveUp(FinalMap map)
         {
@@ -61,7 +72,10 @@ namespace Po_Griby.Gameplay
         {
             return TryMove(map, Position + new Vector2D(1, 0));
         }
-        public override void Interact(Player target) { }
+        public override string? Interact(Player target)
+        {
+            return null;
+        }
     }
     public class Player : Character, IFightable
     {
@@ -121,7 +135,6 @@ namespace Po_Griby.Gameplay
                 }
             }
         }
-
         public void TakeDamage(int damage)
         {
             Health = Math.Max(0, Health - damage);
@@ -134,11 +147,17 @@ namespace Po_Griby.Gameplay
         {
             Dialogue = dialogue;
         }
-        public override void Interact(Player player)
+        public override string? Interact(Player player)
         {
-            Console.WriteLine(Dialogue);
+            return Dialogue;
         }
     }
-
+    public class MapChanger : Entity
+    {
+        public MapChanger(char symbol, Vector2D position) : base(symbol, position)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 
