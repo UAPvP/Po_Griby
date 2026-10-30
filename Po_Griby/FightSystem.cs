@@ -43,7 +43,7 @@ namespace Po_Griby
                     }
                     else
                     {
-                        Console.WriteLine("\nОберіть предмет);
+                        Console.WriteLine("\nОберіть предмет");
                         for (int i = 0; i < inventory.Count; i++)
                         {
                             Console.WriteLine($"{i + 1}. {inventory[i].Name} ({inventory[i].Description})");

@@ -1,0 +1,16 @@
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\Po_Griby.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\Po_Griby.AssemblyInfoInputs.cache
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\Po_Griby.AssemblyInfo.cs
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\Po_Griby.csproj.CoreCompileInputs.cache
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\Po_Griby.sourcelink.json
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\bin\Debug\net8.0\Po_Griby.exe
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\bin\Debug\net8.0\Po_Griby.deps.json
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\bin\Debug\net8.0\Po_Griby.runtimeconfig.json
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\bin\Debug\net8.0\Po_Griby.dll
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\bin\Debug\net8.0\Po_Griby.pdb
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\Po_Griby.dll
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\refint\Po_Griby.dll
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\Po_Griby.pdb
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\Po_Griby.genruntimeconfig.cache
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\ref\Po_Griby.dll
+C:\Users\gluss\source\repos\Po_Griby\Po_Griby\obj\Debug\net8.0\Po_Griby.csproj.Up2Date

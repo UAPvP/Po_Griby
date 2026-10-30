@@ -1,0 +1,5 @@
+Health=20
+AttackSpeed=3
+AttackDamage=5
+DefenseSpeed=2
+DefenseShield=0

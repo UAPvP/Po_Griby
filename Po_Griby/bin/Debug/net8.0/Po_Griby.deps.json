@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Po_Griby/1.0.0": {
+        "runtime": {
+          "Po_Griby.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Po_Griby/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

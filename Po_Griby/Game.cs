@@ -14,16 +14,7 @@ class Program
                 "tiles.txt",
                 "entity-definitions.txt");
 
-            Player? player = null;
-
-            foreach (Entity entity in map.GetEntityMap().Entities)
-            {
-                if (entity is Player foundPlayer)
-                {
-                    player = foundPlayer;
-                    break;
-                }
-            }
+            Player? player = FindPlayer(map);
 
             if (player == null)
             {
@@ -69,6 +60,15 @@ class Program
                         isRunning = false;
                         break;
                 }
+
+                if (player.PendingMapChange != null)
+                {
+                    MapChanger changer = player.PendingMapChange;
+                    player.PendingMapChange = null;
+
+                    if (ChangeMap(changer, ref map, ref player))
+                        Console.Clear();
+                }
             }
         }
         catch (Exception error)
@@ -78,4 +78,66 @@ class Program
             Console.WriteLine(error.Message);
         }
     }
+
+    static Player? FindPlayer(FinalMap map)
+    {
+        foreach (Entity entity in map.GetEntityMap().Entities)
+        {
+            if (entity is Player found)
+                return found;
+        }
+
+        return null;
+    }
+
+    static bool ChangeMap(MapChanger changer, ref FinalMap map, ref Player player)
+    {
+        if (!File.Exists(changer.TileMapFile))
+        {
+            map.SetMessage("karti " + changer.TileMapFile + " nimae");
+            return false;
+        }
+
+        try
+        {
+            FinalMap newMap = new FinalMap(
+                changer.TileMapFile,
+                changer.EntityMapFile,
+                "tiles.txt",
+                "entity-definitions.txt");
+
+            Player? newPlayer = FindPlayer(newMap);
+
+            if (newPlayer == null)
+            {
+                map.SetMessage("na karti ne ma player");
+                return false;
+            }
+
+            newPlayer.CopyStatsFrom(player);
+            map = newMap;
+            player = newPlayer;
+            return true;
+        }
+        catch (Exception error)
+        {
+            map.SetMessage("ne zanydeno karty" + error.Message);
+            return false;
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

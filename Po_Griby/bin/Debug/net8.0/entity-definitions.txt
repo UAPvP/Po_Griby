@@ -1,0 +1,3 @@
+P=Gray,Player,
+E=Red,BasicNPC,Вітаю! Ласкаво просимо.
+N=Green,BasicNPC,На півночі є грибний ліс, і там живуть NPC.

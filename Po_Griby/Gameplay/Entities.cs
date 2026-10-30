@@ -85,6 +85,8 @@ namespace Po_Griby.Gameplay
         public int DefenseSpeed { get; private set; }
         public int DefenseShield { get; private set; }
 
+        public MapChanger? PendingMapChange { get; set; }
+
         public Player(char symbol, Vector2D position) : base(symbol, position)
         {
             string file = "player.txt";
@@ -139,6 +141,18 @@ namespace Po_Griby.Gameplay
         {
             Health = Math.Max(0, Health - damage);
         }
+        public void Heal(int amount)
+        {
+            Health += amount;
+        }
+        public void CopyStatsFrom(Player other)
+        {
+            Health = other.Health;
+            AttackSpeed = other.AttackSpeed;
+            AttackDamage = other.AttackDamage;
+            DefenseSpeed = other.DefenseSpeed;
+            DefenseShield = other.DefenseShield;
+        }
     }
     class BasicNPC : Character
     {
@@ -154,10 +168,68 @@ namespace Po_Griby.Gameplay
     }
     public class MapChanger : Entity
     {
-        public MapChanger(char symbol, Vector2D position) : base(symbol, position)
+        public string TileMapFile { get; }
+        public string EntityMapFile { get; }
+
+        public MapChanger(char symbol, Vector2D position, string? target) : base(symbol, position)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(target))
+                throw new FormatException($"Dlya zminini karti '{symbol}' ne vkazano kartu.");
+
+            TileMapFile = target.Trim();
+            EntityMapFile = "entities-" + TileMapFile;
+        }
+
+        public override string? Interact(Player player)
+        {
+            player.PendingMapChange = this;
+            return "perehid na kartu " + TileMapFile;
+        }
+    }
+    public class Enemy : IFightable
+    {
+        public string Name { get; }
+        public int Health { get; private set; }
+        public int AttackSpeed { get; }
+        public int AttackDamage { get; }
+        public int DefenseSpeed { get; }
+        public int DefenseShield { get; }
+
+        public Enemy(string name, int health, int attackDamage)
+        {
+            Name = name;
+            Health = health;
+            AttackDamage = attackDamage;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            Health = Math.Max(0, Health - damage);
+        }
+
+        public void PerformTurn(Player player)
+        {
+            Console.WriteLine($"\n{Name} zavdaye vam {AttackDamage} ");
+            player.TakeDamage(AttackDamage);
+        }
+    }
+    public class MushroomItem
+    {
+        public string Name { get; }
+        public string Description { get; }
+        private int healAmount;
+
+        public MushroomItem(string name, string description, int healAmount)
+        {
+            Name = name;
+            Description = description;
+            this.healAmount = healAmount;
+        }
+
+        public void Use(Player player)
+        {
+            player.Heal(healAmount);
+            Console.WriteLine($"\nvi zyili {Name} i vidnovili {healAmount} hp");
         }
     }
 }
-
