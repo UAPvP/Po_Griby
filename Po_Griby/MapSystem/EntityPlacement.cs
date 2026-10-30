@@ -37,7 +37,7 @@ namespace Po_Griby.MapSystem
                     return new BasicNPC(Symbol, position, Dialogue ?? string.Empty);
 
                 case "MapChanger":
-                    return new MapChanger(Symbol, position);
+                    return new MapChanger(Symbol, position, Dialogue);
 
                 default:
                     throw new InvalidOperationException(
@@ -82,20 +82,20 @@ namespace Po_Griby.MapSystem
                 string[] parts = entry[1].Split(',', 3);
 
                 if (parts.Length < 2)
-                    throw new FormatException($"Не вказано колір або клас: {originalLine}");
+                    throw new FormatException($"Не вказано назву класу: {originalLine}");
 
                 if (!Enum.TryParse(parts[0].Trim(), true, out ConsoleColor color))
-                    throw new FormatException($"Невідомий колір: {parts[0].Trim()}");
+                    throw new FormatException($"nevidomiy kolir: {parts[0].Trim()}");
 
                 string className = parts[1].Trim();
 
                 if (string.IsNullOrWhiteSpace(className))
-                    throw new FormatException($"Не вказано назву класу: {originalLine}");
+                    throw new FormatException($"ne mae imya klasu {originalLine}");
 
                 string? dialogue = parts.Length == 3 ? parts[2].Trim() : null;
 
                 if (definitions.ContainsKey(symbol))
-                    throw new FormatException($"Символ '{symbol}' описано більше одного разу.");
+                    throw new FormatException($"sibol '{symbol}' napisano bilshe odngoo raza");
 
                 definitions.Add(
                     symbol,
@@ -106,3 +106,24 @@ namespace Po_Griby.MapSystem
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

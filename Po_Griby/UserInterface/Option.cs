@@ -16,6 +16,7 @@ namespace Po_Griby.UserInterface
         public Option(string name, string description, Action Execute)
         {
             this.name = name;
+            this.description = description;
             this.Execute = Execute;
         }
     }
