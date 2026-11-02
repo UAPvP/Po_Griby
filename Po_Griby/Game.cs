@@ -69,6 +69,23 @@ class Program
                     if (ChangeMap(changer, ref map, ref player))
                         Console.Clear();
                 }
+                if (player.PendingBattle != null)
+                 {
+                     Enemy enemyToFight = player.PendingBattle;
+                     player.PendingBattle = null;
+                
+                     bool playerWon = FightSystem.StartBattle(player, enemyToFight, player.Inventory);
+                     Console.Clear();
+                
+                     if (playerWon)
+                     {
+                         map.GetEntityMap().Entities.Remove(enemyToFight); 
+                     }
+                     else
+                     {
+                         break;
+                     }
+                 }
             }
         }
         catch (Exception error)
