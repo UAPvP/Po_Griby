@@ -96,7 +96,13 @@ namespace Po_Griby.Gameplay
         public int DefenseShield { get; private set; }
 
         public MapChanger? PendingMapChange { get; set; }
-
+        
+        public Enemy? PendingBattle { get; set; }
+        public List<MushroomItem> Inventory { get; } = new()
+        {
+            new MushroomItem("Білий гриб", "Відновлює 10 HP", 10),
+            new MushroomItem("Мухомор", "Дивний гриб...", 5)
+        };
         public Player(char symbol, Vector2D position) : base(symbol, position)
         {
             string file = "player.txt";
@@ -224,6 +230,12 @@ namespace Po_Griby.Gameplay
             DefenseShield = defenseShield;
         }
 
+        public override string? Interact(Player player)
+        {
+            player.PendingBattle = this;
+            return $"Увага! Зустріч із ворогом: {Name}!";
+        }
+        
         public virtual void TakeDamage(int damage)
         {
             int actualDamage = damage;
