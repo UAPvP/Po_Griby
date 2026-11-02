@@ -25,39 +25,39 @@ namespace Po_Griby.MapSystem
             ClassName = className;
             Dialogue = string.IsNullOrWhiteSpace(dialogue) ? null : dialogue;
         }
-public Entity CreateEntity(Vector2D position)
-{
-    switch (ClassName)
-    {
-        case "Player":
-            return new Player(Symbol, position);
-
-        case "BasicNPC":
-            return new BasicNPC(Symbol, position, Dialogue ?? string.Empty);
-
-        case "MapChanger":
-            return new MapChanger(Symbol, position, Dialogue);
-
-        case "FalseBoletus":
-            return new FalseBoletus(position);
-
-        case "PuffballMushroom":
-            return new PuffballMushroom(position);
-
-        case "WildBoar":
-            return new WildBoar(position);
-
-        case "WolfPack":
-            return new WolfPack(position);
-
-        case "BearMiniBoss":
-            return new BearMiniBoss(position);
-
-        default:
-            throw new InvalidOperationException(
-                $"Невідомий клас сутності: {ClassName}");
-    }
-}
+        public Entity CreateEntity(Vector2D position)
+        {
+            switch (ClassName)
+            {
+                case "Player":
+                    return new Player(Symbol, position);
+        
+                case "BasicNPC":
+                    return new BasicNPC(Symbol, position, Dialogue ?? string.Empty);
+        
+                case "MapChanger":
+                    return new MapChanger(Symbol, position, Dialogue);
+        
+                case "FalseBoletus":
+                    return new FalseBoletus(position);
+        
+                case "PuffballMushroom":
+                    return new PuffballMushroom(position);
+        
+                case "WildBoar":
+                    return new WildBoar(position);
+        
+                case "WolfPack":
+                    return new WolfPack(position);
+        
+                case "BearMiniBoss":
+                    return new BearMiniBoss(position);
+        
+                default:
+                    throw new InvalidOperationException(
+                        $"Невідомий клас сутності: {ClassName}");
+            }
+        }
 
         public static Dictionary<char, EntityPlacement> Load(string filePath)
         {
