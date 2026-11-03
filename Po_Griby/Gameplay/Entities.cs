@@ -213,23 +213,40 @@ namespace Po_Griby.Gameplay
             player.TakeDamage(AttackDamage);
         }
     }
-    public class MushroomItem
+    public abstract class DroppedItem : Entity
     {
         public string Name { get; }
         public string Description { get; }
-        private int healAmount;
 
-        public MushroomItem(string name, string description, int healAmount)
+        protected DroppedItem(char symbol, Vector2D position, string name, string description)
+            : base(symbol, position)
         {
             Name = name;
             Description = description;
-            this.healAmount = healAmount;
         }
 
-        public void Use(Player player)
+        public override string? Interact(Player player)
         {
-            player.Heal(healAmount);
-            Console.WriteLine($"\nvi zyili {Name} i vidnovili {healAmount} hp");
+            throw new NotImplementedException();
+        }
+
+        public abstract void Use(Player player);
+    }
+
+    public class Mushroom : DroppedItem
+    {
+        public int HealingValue { get; }
+
+        public Mushroom(char symbol, Vector2D position, int healingValue)
+            : base(symbol, position, "Гриб", "Обычный гриб")
+        {
+            HealingValue = healingValue;
+        }
+
+        public override void Use(Player player)
+        {
+            player.Heal(HealingValue);
+            Console.WriteLine($"\nvi zyili {Name} i vidnovili {HealingValue} hp");
         }
     }
 }

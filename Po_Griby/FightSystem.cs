@@ -6,7 +6,7 @@ namespace Po_Griby
 {
     public class FightSystem
     {
-        public static bool StartBattle(Player player, Enemy enemy, List<MushroomItem> inventory)
+        public static bool StartBattle(Player player, Enemy enemy, List<Mushroom> inventory)
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Po_Griby")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f52c06fd4ab27da7caff4ccab65c1c6e02ad3c0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d8749ea62c1dffc3c25c691c5cea08147719f568")]
 [assembly: System.Reflection.AssemblyProductAttribute("Po_Griby")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Po_Griby")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
