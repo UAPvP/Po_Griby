@@ -98,60 +98,21 @@ namespace Po_Griby.Gameplay
         public MapChanger? PendingMapChange { get; set; }
         
         public Enemy? PendingBattle { get; set; }
-        public List<MushroomItem> Inventory { get; } = new()
-        {
-            new MushroomItem("Білий гриб", "Відновлює 10 HP", 10),
-            new MushroomItem("Мухомор", "Дивний гриб...", 5)
-        };
+        public List<MushroomItem> Inventory { get; } = new();
         public Player(char symbol, Vector2D position) : base(symbol, position)
         {
-            string file = "player.txt";
+            ApplyData(PlayerStorage.Load("player.json"));
+        }
 
-            if (!File.Exists(file))
-            {
-                File.WriteAllText(file,
-                    "Health=20\n" +
-                    "AttackSpeed=3\n" +
-                    "AttackDamage=5\n" +
-                    "DefenseSpeed=2\n" +
-                    "DefenseShield=0");
-            }
-
-            string[] lines = File.ReadAllLines(file);
-
-            foreach (string line in lines)
-            {
-                string[] parts = line.Split('=', 2);
-
-                if (parts.Length != 2)
-                    continue;
-
-                string key = parts[0].Trim();
-                string value = parts[1].Trim();
-
-                switch (key)
-                {
-                    case "Health":
-                        Health = int.Parse(value);
-                        break;
-
-                    case "AttackSpeed":
-                        AttackSpeed = int.Parse(value);
-                        break;
-
-                    case "AttackDamage":
-                        AttackDamage = int.Parse(value);
-                        break;
-
-                    case "DefenseSpeed":
-                        DefenseSpeed = int.Parse(value);
-                        break;
-
-                    case "DefenseShield":
-                        DefenseShield = int.Parse(value);
-                        break;
-                }
-            }
+        private void ApplyData(PlayerData data)
+        {
+            Health = data.Health;
+            AttackSpeed = data.AttackSpeed;
+            AttackDamage = data.AttackDamage;
+            DefenseSpeed = data.DefenseSpeed;
+            DefenseShield = data.DefenseShield;
+            Inventory.AddRange(data.Inventory.Select(item =>
+                new MushroomItem(item.Name, item.Description, item.HealingValue)));
         }
 
         public void TakeDamage(int damage)
@@ -171,6 +132,9 @@ namespace Po_Griby.Gameplay
             AttackDamage = other.AttackDamage;
             DefenseSpeed = other.DefenseSpeed;
             DefenseShield = other.DefenseShield;
+            Inventory.Clear();
+            Inventory.AddRange(other.Inventory.Select(item =>
+                new MushroomItem(item.Name, item.Description, item.HealingValue)));
         }
     }
 
@@ -197,7 +161,7 @@ namespace Po_Griby.Gameplay
         public MapChanger(char symbol, Vector2D position, string? target) : base(symbol, position)
         {
             if (string.IsNullOrWhiteSpace(target))
-                throw new FormatException($"Dlya zminini karti '{symbol}' ne vkazano kartu.");
+                throw new FormatException($"Для переходу з мапи '{symbol}' не вказано цільову мапу.");
 
             TileMapFile = target.Trim();
             EntityMapFile = "entities-" + TileMapFile;
@@ -206,7 +170,7 @@ namespace Po_Griby.Gameplay
         public override string? Interact(Player player)
         {
             player.PendingMapChange = this;
-            return "perehid na kartu " + TileMapFile;
+            return "Перехід на мапу " + TileMapFile;
         }
     }
 
@@ -233,7 +197,7 @@ namespace Po_Griby.Gameplay
         public override string? Interact(Player player)
         {
             player.PendingBattle = this;
-            return $"Увага! Зустріч із ворогом: {Name}!";
+            return $"Увага! Ви зустріли ворога: {Name}!";
         }
         
         public virtual void TakeDamage(int damage)
@@ -245,7 +209,7 @@ namespace Po_Griby.Gameplay
                 if (DefenseShield >= actualDamage)
                 {
                     DefenseShield -= actualDamage;
-                    Console.WriteLine($"Щит ворога {Name} поглинув увесь урон ({actualDamage})!");
+                    Console.WriteLine($"Щит ворога {Name} поглинув усю шкоду ({actualDamage})!");
                     return;
                 }
                 else
@@ -263,14 +227,14 @@ namespace Po_Griby.Gameplay
 
     public class FalseBoletus : Enemy
     {
-        public FalseBoletus(Vector2D position) 
-            : base("Помилковий Білий", 'm', position, health: 18, damage: 3, attackSpeed: 1, defenseSpeed: 1, defenseShield: 2) { }
+        public FalseBoletus(char symbol, Vector2D position) 
+            : base("Помилковий Білий", symbol, position, health: 18, damage: 3, attackSpeed: 1, defenseSpeed: 1, defenseShield: 2) { }
 
         public override void PerformTurn(Player player)
         {
             Console.WriteLine($"\n{Name} виділяє гіркий сік і обпікає вам шкіру!");
             player.TakeDamage(AttackDamage);
-            Console.WriteLine($"Ви отримали {AttackDamage} шкоди!");
+            Console.WriteLine($"Ви отримали {AttackDamage} одиниць шкоди!");
         }
     }
     public abstract class DroppedItem : Entity
@@ -303,7 +267,7 @@ namespace Po_Griby.Gameplay
         public override void Use(Player player)
         {
             player.Heal(HealingValue);
-            Console.WriteLine($"\nВи з'їли {Name} і відновили {HealingValue} HP");
+            Console.WriteLine($"\nВи з'їли предмет «{Name}» і відновили {HealingValue} HP.");
         }
     }
 
@@ -312,8 +276,8 @@ namespace Po_Griby.Gameplay
         private int fuseTimer;
         private readonly int explosionDamage;
 
-        public PuffballMushroom(Vector2D position, int timerTurns = 3, int explosionDamage = 18) 
-            : base("Гриб-Пилковик", 'P', position, health: 15, damage: 0, attackSpeed: 1, defenseSpeed: 1, defenseShield: 0)
+        public PuffballMushroom(char symbol, Vector2D position, int timerTurns = 3, int explosionDamage = 18) 
+            : base("Гриб-Пилковик", symbol, position, health: 15, damage: 0, attackSpeed: 1, defenseSpeed: 1, defenseShield: 0)
         {
             this.fuseTimer = timerTurns;
             this.explosionDamage = explosionDamage;
@@ -326,15 +290,15 @@ namespace Po_Griby.Gameplay
             if (fuseTimer > 0)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"\n{Name} роздувається і шипить! До вибуху залишилось {fuseTimer} ходів!");
+                Console.WriteLine($"\n{Name} роздувається і шипить! До вибуху залишилося {fuseTimer} ходів!");
                 Console.ResetColor();
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"\n БУМ! {Name} вибухає хмарою отруйного пилу!");
+                Console.WriteLine($"\nБА-БАХ! {Name} вибухає хмарою отруйного пилу!");
                 player.TakeDamage(explosionDamage);
-                Console.WriteLine($"Ви отримали {explosionDamage} шкоди від вибуху!");
+                Console.WriteLine($"Ви отримали {explosionDamage} одиниць шкоди від вибуху!");
                 Console.ResetColor();
                 Health = 0;
             }
@@ -345,8 +309,8 @@ namespace Po_Griby.Gameplay
     {
         private bool isCharging = false;
 
-        public WildBoar(Vector2D position) 
-            : base("Дикий Кабан", 'B', position, health: 35, damage: 5, attackSpeed: 3, defenseSpeed: 1, defenseShield: 5) { }
+        public WildBoar(char symbol, Vector2D position) 
+            : base("Дикий Кабан", symbol, position, health: 35, damage: 5, attackSpeed: 3, defenseSpeed: 1, defenseShield: 5) { }
 
         public override void PerformTurn(Player player)
         {
@@ -365,7 +329,7 @@ namespace Po_Griby.Gameplay
                 Console.WriteLine($"\n{Name} ВРІЗАЄТЬСЯ у вас на повній швидкості!");
                 Console.ResetColor();
                 player.TakeDamage(heavyDamage);
-                Console.WriteLine($"Ви отримали {heavyDamage} шкоди від тарана!");
+                Console.WriteLine($"Ви отримали {heavyDamage} одиниць шкоди від тарана!");
             }
         }
     }
@@ -374,8 +338,8 @@ namespace Po_Griby.Gameplay
     {
         public int WolfCount { get; private set; }
 
-        public WolfPack(Vector2D position, int wolfCount = 2) 
-            : base($"Зграя вовків ({wolfCount})", 'W', position, health: 15 * wolfCount, damage: 4, attackSpeed: 2, defenseSpeed: 1, defenseShield: 0)
+        public WolfPack(char symbol, Vector2D position, int wolfCount = 2) 
+            : base($"Зграя вовків ({wolfCount})", symbol, position, health: 15 * wolfCount, damage: 4, attackSpeed: 2, defenseSpeed: 1, defenseShield: 0)
         {
             WolfCount = Math.Clamp(wolfCount, 2, 3);
             Name = $"Зграя вовків - ({WolfCount}) вовки";
@@ -389,7 +353,7 @@ namespace Po_Griby.Gameplay
             Console.WriteLine($"\n{Name} оточує вас!");
             for (int i = 0; i < WolfCount; i++)
             {
-                Console.WriteLine($"-> Вовк #{i + 1} кусає вас за бочок, наносячи {AttackDamage} урона");
+                Console.WriteLine($"→ Вовк №{i + 1} кусає вас і завдає {AttackDamage} одиниць шкоди.");
                 player.TakeDamage(AttackDamage);
             }
         }
@@ -397,8 +361,8 @@ namespace Po_Griby.Gameplay
 
     public class BearMiniBoss : Enemy
     {
-        public BearMiniBoss(Vector2D position) 
-            : base("Розлючений Мішутка (Міні-бос)", 'M', position, health: 60, damage: 8, attackSpeed: 1, defenseSpeed: 1, defenseShield: 10) { }
+        public BearMiniBoss(char symbol, Vector2D position) 
+            : base("Розлючений Мішутка (Міні-бос)", symbol, position, health: 60, damage: 8, attackSpeed: 1, defenseSpeed: 1, defenseShield: 10) { }
 
         public override void PerformTurn(Player player)
         {
@@ -406,7 +370,7 @@ namespace Po_Griby.Gameplay
             Console.WriteLine($"\n{Name} оглушливо ричить і завдає потужного удару лапою!");
             Console.ResetColor();
             player.TakeDamage(AttackDamage);
-            Console.WriteLine($"Ви отримали {AttackDamage} важкої шкоди!");
+            Console.WriteLine($"Ви отримали {AttackDamage} одиниць сильної шкоди!");
         }
     }
 

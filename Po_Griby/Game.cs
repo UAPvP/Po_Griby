@@ -1,6 +1,7 @@
 using System;
 using Po_Griby.Gameplay;
 using Po_Griby.MapSystem;
+using Po_Griby;
 
 class Program
 {
@@ -11,14 +12,14 @@ class Program
             FinalMap map = new FinalMap(
                 "map.txt",
                 "entities-map.txt",
-                "tiles.txt",
-                "entity-definitions.txt");
+                "tiles.json",
+                "entities.json");
 
             Player? player = FindPlayer(map);
 
             if (player == null)
             {
-                Console.WriteLine("На карті немає гравця. Додайте символ гравця до entities-map.txt.");
+                Console.WriteLine("На мапі немає гравця. Додайте його символ до entities-map.txt.");
                 return;
             }
 
@@ -30,7 +31,7 @@ class Program
                 Console.SetCursorPosition(0, 0);
                 map.Show();
                 Console.WriteLine();
-                Console.WriteLine("Керування: W — вгору, A — вліво, S — вниз, D — вправо, Q — вихід.");
+                Console.WriteLine("Керування: W — вгору, A — ліворуч, S — вниз, D — праворуч, Q — вихід.");
 
                 int messageWidth = Math.Max(1, Console.WindowWidth - 1);
                 string message = map.LastMessage;
@@ -57,6 +58,7 @@ class Program
                         player.MoveRight(map);
                         break;
                     case ConsoleKey.Q:
+                        PlayerStorage.Save("player.json", player);
                         isRunning = false;
                         break;
                 }
@@ -79,13 +81,15 @@ class Program
                 
                      if (playerWon)
                      {
-                         map.GetEntityMap().Entities.Remove(enemyToFight); 
+                         map.GetEntityMap().Remove(enemyToFight);
                      }
                      else
                      {
+                         PlayerStorage.Save("player.json", player);
                          break;
                      }
                  }
+                PlayerStorage.Save("player.json", player);
             }
         }
         catch (Exception error)
@@ -111,7 +115,7 @@ class Program
     {
         if (!File.Exists(changer.TileMapFile))
         {
-            map.SetMessage("karti " + changer.TileMapFile + " nimae");
+            map.SetMessage("Мапу " + changer.TileMapFile + " не знайдено.");
             return false;
         }
 
@@ -120,14 +124,14 @@ class Program
             FinalMap newMap = new FinalMap(
                 changer.TileMapFile,
                 changer.EntityMapFile,
-                "tiles.txt",
-                "entity-definitions.txt");
+                "tiles.json",
+                "entities.json");
 
             Player? newPlayer = FindPlayer(newMap);
 
             if (newPlayer == null)
             {
-                map.SetMessage("na karti ne ma player");
+                map.SetMessage("На мапі немає гравця.");
                 return false;
             }
 
@@ -138,7 +142,7 @@ class Program
         }
         catch (Exception error)
         {
-            map.SetMessage("ne zanydeno karty" + error.Message);
+            map.SetMessage("Не вдалося завантажити мапу: " + error.Message);
             return false;
         }
     }

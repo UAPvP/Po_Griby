@@ -1,7 +1,24 @@
-﻿namespace Po_Griby.MapSystem
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace Po_Griby.MapSystem
 {
+    public class TileDefinitionsFile
+    {
+        public List<TileDefinition> Tiles { get; set; } = new();
+    }
+
+    public class TileDefinition
+    {
+        public char Symbol { get; set; }
+        public ConsoleColor Color { get; set; }
+        public bool IsWalkable { get; set; }
+        public bool IsNPCWalkable { get; set; }
+    }
+
     public class TileInfo
     {
+
         public ConsoleColor Color { get; private set; }
         public bool IsWalkable { get; private set; }
         public bool IsNPCWalkable { get; private set; }
@@ -13,55 +30,40 @@
             IsNPCWalkable = isNPCWalkable;
         }
 
-        public static Dictionary<char, TileInfo> LoadTiles(string file = "tiles.txt")
+        public static Dictionary<char, TileInfo> LoadTiles(string file = "tiles.json")
         {
             if (!File.Exists(file))
             {
-                File.WriteAllText(file,
-                    ".=Gray,true,true\n" +
-                    "#=DarkGray,false,false\n" +
-                    "~=Blue,false,false\n" +
-                    "G=Green,true,true\n" +
-                    "^=DarkYellow,true,false\n");
+                var defaults = new TileDefinitionsFile
+                {
+                    Tiles =
+                    {
+                        new() { Symbol = '.', Color = ConsoleColor.Gray, IsWalkable = true, IsNPCWalkable = true },
+                        new() { Symbol = '#', Color = ConsoleColor.DarkGray, IsWalkable = false, IsNPCWalkable = false },
+                        new() { Symbol = '~', Color = ConsoleColor.Blue, IsWalkable = false, IsNPCWalkable = false },
+                        new() { Symbol = 'G', Color = ConsoleColor.Green, IsWalkable = true, IsNPCWalkable = true },
+                        new() { Symbol = '^', Color = ConsoleColor.DarkYellow, IsWalkable = true, IsNPCWalkable = false }
+                    }
+                };
+                SaveTiles(file, defaults);
             }
 
-            Dictionary<char, TileInfo> tiles = new();
+            string json = File.ReadAllText(file);
+            var data = JsonSerializer.Deserialize<TileDefinitionsFile>(json)
+                ?? throw new InvalidDataException("Файл визначень тайлів порожній.");
 
-            foreach (string line in File.ReadAllLines(file))
+            var tiles = new Dictionary<char, TileInfo>();
+            foreach (TileDefinition definition in data.Tiles)
             {
-                string trimmedLine = line.Trim();
-                if (string.IsNullOrWhiteSpace(trimmedLine))
-                {
-                    continue;
-                }
-
-                string[] entry = trimmedLine.Split('=', 2);
-                if (entry.Length != 2 || entry[0].Trim().Length != 1)
-                    throw new FormatException($"Неправильний формат тайлу: {line}");
-
-                char symbol = entry[0].Trim()[0];
-                string[] parts = entry[1].Split(',', 3);
-
-                if (parts.Length != 3)
-                    throw new FormatException(
-                        $"Для тайлу '{symbol}' очікується формат символ=колір,IsWalkable,IsNPCWalkable.");
-
-                if (!Enum.TryParse(parts[0].Trim(), true, out ConsoleColor color))
-                    throw new FormatException($"Невідомий колір тайлу: {parts[0].Trim()}");
-
-                if (!bool.TryParse(parts[1].Trim(), out bool isWalkable))
-                    throw new FormatException($"Неправильне значення IsWalkable у тайлу '{symbol}'.");
-
-                if (!bool.TryParse(parts[2].Trim(), out bool isNPCWalkable))
-                    throw new FormatException($"Неправильне значення IsNPCWalkable у тайлу '{symbol}'.");
-
-                if (isNPCWalkable && !isWalkable)
-                    throw new FormatException(
-                        $"Тайл '{symbol}' не може бути прохідним для NPC і непрохідним для гравця.");
-
-                tiles[symbol] = new TileInfo(color, isWalkable, isNPCWalkable);
+                if (!tiles.TryAdd(definition.Symbol, new TileInfo(definition.Color, definition.IsWalkable, definition.IsNPCWalkable)))
+                    throw new InvalidDataException($"Символ тайлу '{definition.Symbol}' указано кілька разів.");
             }
             return tiles;
+        }
+
+        private static void SaveTiles(string file, TileDefinitionsFile data)
+        {
+            File.WriteAllText(file, JsonSerializer.Serialize(data));
         }
     }
 }

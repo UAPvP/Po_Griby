@@ -1,0 +1,9 @@
+{
+  "tiles": [
+    { "symbol": ".", "color": "Gray", "isWalkable": true, "isNPCWalkable": true },
+    { "symbol": "#", "color": "DarkGray", "isWalkable": false, "isNPCWalkable": false },
+    { "symbol": "~", "color": "Blue", "isWalkable": false, "isNPCWalkable": false },
+    { "symbol": "G", "color": "Green", "isWalkable": true, "isNPCWalkable": true },
+    { "symbol": "^", "color": "DarkYellow", "isWalkable": true, "isNPCWalkable": false }
+  ]
+}

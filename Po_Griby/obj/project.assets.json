@@ -8,7 +8,7 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\novos\\.nuget\\packages\\": {}
+    "C:\\Users\\novos\\Downloads\\test\\Po_Griby\\Po_Griby\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -16,7 +16,7 @@
       "projectUniqueName": "C:\\Users\\novos\\Downloads\\test\\Po_Griby\\Po_Griby\\Po_Griby.csproj",
       "projectName": "Po_Griby",
       "projectPath": "C:\\Users\\novos\\Downloads\\test\\Po_Griby\\Po_Griby\\Po_Griby.csproj",
-      "packagesPath": "C:\\Users\\novos\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\novos\\Downloads\\test\\Po_Griby\\Po_Griby\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\novos\\Downloads\\test\\Po_Griby\\Po_Griby\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [

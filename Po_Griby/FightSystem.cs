@@ -6,7 +6,7 @@ namespace Po_Griby
 {
     public class FightSystem
     {
-        public static bool StartBattle(Player player, Enemy enemy, List<Mushroom> inventory)
+        public static bool StartBattle(Player player, Enemy enemy, List<MushroomItem> inventory)
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
@@ -21,7 +21,7 @@ namespace Po_Griby
                 Console.WriteLine($" Ви: HP [{player.Health}] | DMG [{player.AttackDamage}]");
                 Console.WriteLine($" Ворог ({enemy.Name}): HP [{enemy.Health}]");
                 Console.WriteLine("--------------------------------------------------");
-                Console.WriteLine("Твій хід! Оберіть дію:");
+                Console.WriteLine("Ваш хід! Оберіть дію:");
                 Console.WriteLine("1. Атакувати");
                 Console.WriteLine("2. Використати предмет з інвентаря");
                 Console.WriteLine("3. Втекти з бою");
@@ -31,19 +31,19 @@ namespace Po_Griby
 
                 if (choice == "1")
                 {
-                    Console.WriteLine($"\nВи завдаєте шкоди {enemy.Name}!");
+                    Console.WriteLine($"\nВи атакуєте {enemy.Name}!");
                     enemy.TakeDamage(player.AttackDamage);
-                    Console.WriteLine($" {player.AttackDamage} Наносить удар!");
+                    Console.WriteLine($"Ви завдали {player.AttackDamage} одиниць шкоди.");
                 }
                 else if (choice == "2")
                 {
                     if (inventory.Count == 0)
                     {
-                        Console.WriteLine("\nУ вас немає предметів в інвентарі! Хід пропущено.");
+                        Console.WriteLine("\nУ вашому інвентарі немає предметів! Ви пропускаєте хід.");
                     }
                     else
                     {
-                        Console.WriteLine("\nОберіть предмет");
+                        Console.WriteLine("\nОберіть предмет:");
                         for (int i = 0; i < inventory.Count; i++)
                         {
                             Console.WriteLine($"{i + 1}. {inventory[i].Name} ({inventory[i].Description})");
@@ -57,24 +57,24 @@ namespace Po_Griby
                         }
                         else
                         {
-                            Console.WriteLine("Невірний вибір, хід змарновано!");
+                            Console.WriteLine("Неправильний вибір. Ви пропускаєте хід!");
                         }
                     }
                 }
                 else if (choice == "3")
                 {
-                    Console.WriteLine("\n Ви успішно покинули місце битви!");
+                    Console.WriteLine("\nВи успішно втекли з бою!");
                     return false;
                 }
                 else
                 {
-                    Console.WriteLine("\nВи замріялися і пропустили хід!");
+                    Console.WriteLine("\nВи загаялися і пропустили хід!");
                 }
 
                 if (enemy.Health <= 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"\nПеремога! {enemy.Name} був повержений!");
+                    Console.WriteLine($"\nПеремога! Ви здолали ворога: {enemy.Name}!");
                     Console.ResetColor();
                     Console.WriteLine("Натисніть будь-яку клавішу...");
                     Console.ReadKey(true);
@@ -86,7 +86,7 @@ namespace Po_Griby
                 if (player.Health <= 0)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("\nВи загинули в бою... GAME OVER(⁠*⁠_⁠*⁠)");
+                    Console.WriteLine("\nВи загинули в бою... ГРУ ЗАВЕРШЕНО.");
                     Console.ResetColor();
                     Console.WriteLine("Натисніть будь-яку клавішу...");
                     Console.ReadKey(true);
