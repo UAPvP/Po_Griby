@@ -2,11 +2,17 @@ using System;
 using Po_Griby.Gameplay;
 using Po_Griby.MapSystem;
 using Po_Griby;
+using Po_Griby.Logging;
 
 class Program
 {
     static void Main()
     {
+        string logPath = Path.Combine(Environment.CurrentDirectory, "lastsession.log");
+        File.WriteAllText(logPath, string.Empty);
+        var logger = new Logger(new FileLogProvider(logPath));
+        logger.Log(LogLevel.Info, "Ігрову сесію розпочато.");
+
         try
         {
             FinalMap map = new FinalMap(
@@ -14,14 +20,18 @@ class Program
                 "entities-map.txt",
                 "tiles.json",
                 "entities.json");
+            logger.Log(LogLevel.Info, "Мапу гри завантажено.");
 
             Player? player = FindPlayer(map);
 
             if (player == null)
             {
+                logger.Log(LogLevel.Warning, "На мапі не знайдено гравця.");
                 Console.WriteLine("На мапі немає гравця. Додайте його символ до entities-map.txt.");
                 return;
             }
+
+            logger.Log(LogLevel.Info, "Гравця знайдено, гра починається.");
 
             bool isRunning = true;
             Console.Clear();
@@ -58,6 +68,7 @@ class Program
                         player.MoveRight(map);
                         break;
                     case ConsoleKey.Q:
+                        logger.Log(LogLevel.Info, "Гравець вийшов з гри.");
                         PlayerStorage.Save("player.json", player);
                         isRunning = false;
                         break;
@@ -69,7 +80,10 @@ class Program
                     player.PendingMapChange = null;
 
                     if (ChangeMap(changer, ref map, ref player))
+                    {
+                        logger.Log(LogLevel.Info, $"Гравець перейшов на мапу {changer.TileMapFile}.");
                         Console.Clear();
+                    }
                 }
                 if (player.PendingBattle != null)
                  {
@@ -77,6 +91,8 @@ class Program
                      player.PendingBattle = null;
                 
                      bool playerWon = FightSystem.StartBattle(player, enemyToFight, player.Inventory);
+                     logger.Log(playerWon ? LogLevel.Info : LogLevel.Warning,
+                         playerWon ? "Гравець переміг у бою." : "Гравець програв бій.");
                      Console.Clear();
                 
                      if (playerWon)
@@ -94,6 +110,7 @@ class Program
         }
         catch (Exception error)
         {
+            logger.Log(LogLevel.Critical, "Не вдалося продовжити гру.", error);
             Console.ResetColor();
             Console.WriteLine("Не вдалося завантажити гру:");
             Console.WriteLine(error.Message);

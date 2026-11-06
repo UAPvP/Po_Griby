@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace Po_Griby.Gameplay
 {
-    public sealed class PlayerData
+    public class PlayerData
     {
         public int Health { get; set; } = 20;
         public int AttackSpeed { get; set; } = 3;
@@ -12,7 +12,7 @@ namespace Po_Griby.Gameplay
         public List<MushroomItemData> Inventory { get; set; } = new();
     }
 
-    public sealed class MushroomItemData
+    public class MushroomItemData
     {
         public string Name { get; set; } = "";
         public string Description { get; set; } = "";
