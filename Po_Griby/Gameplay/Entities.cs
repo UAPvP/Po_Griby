@@ -96,6 +96,9 @@ namespace Po_Griby.Gameplay
         public int DefenseShield { get; private set; }
 
         public MapChanger? PendingMapChange { get; set; }
+
+        public Inventory PlayerInventory { get; } = new();
+        public Enemy? PendingBattle { get; set; }
         
         public Enemy? PendingBattle { get; set; }
         public List<MushroomItem> Inventory { get; } = new();
