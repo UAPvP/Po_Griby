@@ -1,5 +1,0 @@
-.=Gray,true,true
-#=DarkGray,false,false
-~=Blue,false,false
-G=Green,true,true
-^=DarkYellow,true,false

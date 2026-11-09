@@ -1,13 +1,18 @@
 using System;
+using System.IO;
 using Po_Griby.Gameplay;
-using Po_Griby.MapSystem;
-using Po_Griby;
+using Po_Griby.Interface;
 using Po_Griby.Logging;
+using Po_Griby.MapSystem;
+using Po_Griby.UserInterface;
 
 class Program
 {
     static void Main()
     {
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+        Console.InputEncoding = System.Text.Encoding.UTF8;
+
         string logPath = Path.Combine(Environment.CurrentDirectory, "lastsession.log");
         File.WriteAllText(logPath, string.Empty);
         var logger = new Logger(new FileLogProvider(logPath));
@@ -15,6 +20,33 @@ class Program
 
         try
         {
+            Menu menu = new Menu("======🍄PO GRIBY🍄======");
+            MenuSection mainSection = new MenuSection("🌲-ГОЛОВНЕ МЕНЮ-🌲");
+
+            mainSection.AddOption("🎮 ГРАТИ", "Почати гру", () =>
+            {
+                game_plot plot = new game_plot();
+                plot.plot();
+                menu.Close();
+            });
+            mainSection.AddOption("📖 ПРАВИЛА", "Керування та правила", () =>
+            {
+                Console.Clear();
+                Console.WriteLine("Керування: W — вгору, A — ліворуч, S — вниз, D — праворуч, Q — вихід.\n" +
+                                  "Зіткніться з ворогом, щоб почати бій. У бою можна атакувати, використати гриб або втекти.");
+                Console.WriteLine("\nНатисніть будь-яку клавішу, щоб повернутися до меню...");
+                Console.ReadKey(true);
+            });
+            mainSection.AddOption("🚪 ВИЙТИ", "Завершити гру", () =>
+            {
+                Console.Clear();
+                Console.WriteLine("До зустрічі!");
+                Environment.Exit(0);
+            });
+
+            menu.AddSection(mainSection);
+            menu.Run();
+
             FinalMap map = new FinalMap(
                 "map.txt",
                 "entities-map.txt",
@@ -23,7 +55,6 @@ class Program
             logger.Log(LogLevel.Info, "Мапу гри завантажено.");
 
             Player? player = FindPlayer(map);
-
             if (player == null)
             {
                 logger.Log(LogLevel.Warning, "На мапі не знайдено гравця.");
@@ -32,7 +63,6 @@ class Program
             }
 
             logger.Log(LogLevel.Info, "Гравця знайдено, гра починається.");
-
             bool isRunning = true;
             Console.Clear();
 
@@ -45,28 +75,17 @@ class Program
 
                 int messageWidth = Math.Max(1, Console.WindowWidth - 1);
                 string message = map.LastMessage;
-
                 if (message.Length > messageWidth)
                     message = message.Substring(0, messageWidth);
-
                 Console.Write(message.PadRight(messageWidth));
 
                 ConsoleKey key = Console.ReadKey(true).Key;
-
                 switch (key)
                 {
-                    case ConsoleKey.W:
-                        player.MoveUp(map);
-                        break;
-                    case ConsoleKey.A:
-                        player.MoveLeft(map);
-                        break;
-                    case ConsoleKey.S:
-                        player.MoveDown(map);
-                        break;
-                    case ConsoleKey.D:
-                        player.MoveRight(map);
-                        break;
+                    case ConsoleKey.W: player.MoveUp(map); break;
+                    case ConsoleKey.A: player.MoveLeft(map); break;
+                    case ConsoleKey.S: player.MoveDown(map); break;
+                    case ConsoleKey.D: player.MoveRight(map); break;
                     case ConsoleKey.Q:
                         logger.Log(LogLevel.Info, "Гравець вийшов з гри.");
                         PlayerStorage.Save("player.json", player);
@@ -78,33 +97,31 @@ class Program
                 {
                     MapChanger changer = player.PendingMapChange;
                     player.PendingMapChange = null;
-
                     if (ChangeMap(changer, ref map, ref player))
                     {
                         logger.Log(LogLevel.Info, $"Гравець перейшов на мапу {changer.TileMapFile}.");
                         Console.Clear();
                     }
                 }
+
                 if (player.PendingBattle != null)
-                 {
-                     Enemy enemyToFight = player.PendingBattle;
-                     player.PendingBattle = null;
-                
-                     bool playerWon = FightSystem.StartBattle(player, enemyToFight, player.Inventory);
-                     logger.Log(playerWon ? LogLevel.Info : LogLevel.Warning,
-                         playerWon ? "Гравець переміг у бою." : "Гравець програв бій.");
-                     Console.Clear();
-                
-                     if (playerWon)
-                     {
-                         map.GetEntityMap().Remove(enemyToFight);
-                     }
-                     else
-                     {
-                         PlayerStorage.Save("player.json", player);
-                         break;
-                     }
-                 }
+                {
+                    Enemy enemyToFight = player.PendingBattle;
+                    player.PendingBattle = null;
+                    bool playerWon = FightSystem.StartBattle(player, enemyToFight, player.Inventory);
+                    logger.Log(playerWon ? LogLevel.Info : LogLevel.Warning,
+                        playerWon ? "Гравець переміг у бою." : "Гравець програв бій.");
+                    Console.Clear();
+
+                    if (playerWon)
+                        map.GetEntityMap().Remove(enemyToFight);
+                    else
+                    {
+                        PlayerStorage.Save("player.json", player);
+                        break;
+                    }
+                }
+
                 PlayerStorage.Save("player.json", player);
             }
         }
@@ -124,7 +141,6 @@ class Program
             if (entity is Player found)
                 return found;
         }
-
         return null;
     }
 
@@ -143,9 +159,7 @@ class Program
                 changer.EntityMapFile,
                 "tiles.json",
                 "entities.json");
-
             Player? newPlayer = FindPlayer(newMap);
-
             if (newPlayer == null)
             {
                 map.SetMessage("На мапі немає гравця.");
@@ -164,18 +178,3 @@ class Program
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

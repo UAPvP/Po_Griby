@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using Po_Griby.UserInterface;
+using static Po_Griby.UserInterface.Decorations;
 
 namespace Po_Griby.Interface
 {
@@ -12,43 +12,114 @@ namespace Po_Griby.Interface
         public string Header { get; }
         public List<MenuSection> sections { get; } = new();
 
-        private int selectedIndex = 0;
+        private readonly List<int> optionYPositions = new();
+        private readonly Cursore cursor = new();
+        private readonly CursorePrintText textCursor = new();
+        private readonly Decorations.ForestAnimation forest = new();
+        private readonly SnowAnimation snow = new();
+        private bool exitMenu;
+        private int selectedIndex;
 
         public Menu(string header)
         {
             Header = header;
         }
 
-        public void AddSection(MenuSection section)
+        public void AddSection(MenuSection section) => sections.Add(section);
+
+        public void Close() => exitMenu = true;
+
+        private List<Option> GetAllOptions() => sections.SelectMany(section => section.options).ToList();
+
+        public void MoveNext()
         {
-            sections.Add(section);
+            int count = GetAllOptions().Count;
+            if (count == 0)
+                return;
+            selectedIndex = (selectedIndex + 1) % count;
         }
 
-        private List<Option> GetAllOptions()
+        public void MovePrevious()
         {
-            return sections
-                .SelectMany(s => s.options)
-                .ToList();
+            int count = GetAllOptions().Count;
+            if (count == 0)
+                return;
+            selectedIndex = (selectedIndex - 1 + count) % count;
         }
 
-        public void MoveNext() //вказівник наступний
+        public void Render()
         {
-            throw new NotImplementedException();
+            optionYPositions.Clear();
+            Console.Clear();
+            snow.UpdateSnow();
+            forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
+
+            cursor.tp_Cursor(48, 7);
+            Console.WriteLine(Header);
+            cursor.tp_Cursor(53, 9);
+
+            int row = 0;
+            foreach (MenuSection section in sections)
+            {
+                Console.WriteLine(section.title);
+                foreach (Option option in section.options)
+                {
+                    int y = 11 + row * 2;
+                    optionYPositions.Add(y);
+                    cursor.tp_Cursor(52, y);
+                    Console.WriteLine(option.name);
+                    row++;
+                }
+            }
+
+            if (optionYPositions.Count > 0)
+            {
+                selectedIndex = Math.Clamp(selectedIndex, 0, optionYPositions.Count - 1);
+                textCursor.PrintText(49, optionYPositions[selectedIndex], "-->");
+            }
         }
 
-        public void MovePrevious() //вказівник попередній
+        public void SelectCurrent()
         {
-            throw new NotImplementedException();
+            List<Option> options = GetAllOptions();
+            if (options.Count == 0)
+                return;
+            options[selectedIndex].Execute();
         }
 
-        public void Render() //відображення
+        public void Run()
         {
-            throw new NotImplementedException();
-        }
+            Console.CursorVisible = false;
+            try
+            {
+                Render();
+                if (optionYPositions.Count == 0)
+                    return;
 
-        public void SelectCurrent() //натиснути обраний варіант
-        {
-            throw new NotImplementedException();
+                while (!exitMenu)
+                {
+                    if (Console.KeyAvailable)
+                    {
+                        switch (Console.ReadKey(true).Key)
+                        {
+                            case ConsoleKey.DownArrow: MoveNext(); break;
+                            case ConsoleKey.UpArrow: MovePrevious(); break;
+                            case ConsoleKey.Enter: SelectCurrent(); break;
+                            case ConsoleKey.Escape: exitMenu = true; break;
+                        }
+                    }
+
+                    if (!exitMenu)
+                    {
+                        Render();
+                        Thread.Sleep(150);
+                    }
+                }
+            }
+            finally
+            {
+                Console.CursorVisible = true;
+            }
         }
     }
 }
