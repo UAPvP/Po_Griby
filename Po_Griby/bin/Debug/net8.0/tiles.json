@@ -1,0 +1,1 @@
+{"Tiles":[{"Symbol":".","Color":7,"IsWalkable":true,"IsNPCWalkable":true},{"Symbol":"#","Color":8,"IsWalkable":false,"IsNPCWalkable":false},{"Symbol":"~","Color":9,"IsWalkable":false,"IsNPCWalkable":false},{"Symbol":"G","Color":10,"IsWalkable":true,"IsNPCWalkable":true},{"Symbol":"^","Color":6,"IsWalkable":true,"IsNPCWalkable":false}]}

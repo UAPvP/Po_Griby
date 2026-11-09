@@ -4,7 +4,6 @@
 *.suo
 
 # Build
-[Bb]in/
 [Oo]bj/
 
 # NuGet
@@ -28,3 +27,18 @@ Thumbs.db
 # Generated files
 *.cache
 *.pdb
+
+# Compiled binaries
+*.dll
+*.exe
+
+# Local .NET CLI and tool caches
+**/.dotnet/
+**/.dotnet-cli/
+**/.dotnet-home/
+
+# Generated test and build artifacts
+**/TestResults/
+**/artifacts/
+**/coverage/
+*.tmp
