@@ -1,0 +1,19 @@
+{
+  "health": 20,
+  "attackSpeed": 3,
+  "attackDamage": 5,
+  "defenseSpeed": 2,
+  "defenseShield": 0,
+  "inventory": [
+    {
+      "name": "Білий гриб",
+      "description": "Відновлює 10 HP",
+      "healingValue": 10
+    },
+    {
+      "name": "Мухомор",
+      "description": "Дивний гриб...",
+      "healingValue": 5
+    }
+  ]
+}

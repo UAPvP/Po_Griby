@@ -16,8 +16,8 @@ namespace Po_Griby.MapSystem
         public FinalMap(
             string tileMapFilePath,
             string entityMapFilePath,
-            string tileDefinitionsFilePath = "tiles.txt",
-            string entityDefinitionsFilePath = "entity-definitions.txt")
+            string tileDefinitionsFilePath = "tiles.json",
+            string entityDefinitionsFilePath = "entities.json")
         {
             tileMap = new TileMap(tileMapFilePath);
             tileDefinitions = TileInfo.LoadTiles(tileDefinitionsFilePath);

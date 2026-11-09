@@ -12,6 +12,8 @@ namespace Po_Griby.MapSystem
 
         public IReadOnlyList<Entity> Entities => entities;
 
+        public bool Remove(Entity entity) => entities.Remove(entity);
+
         public EntityMap(
             TileMap tileMap,
             Dictionary<char, TileInfo> tileDefinitions,
@@ -30,8 +32,6 @@ namespace Po_Griby.MapSystem
             else
             {
                 string[] lines = File.ReadAllLines(filePath);
-
-                // Если сущность находится за границей новой карты, не затираем её молча.
                 for (int y = 0; y < lines.Length; y++)
                 {
                     for (int x = 0; x < lines[y].Length; x++)
@@ -74,7 +74,6 @@ namespace Po_Griby.MapSystem
                         }
                         else if (symbol != expected)
                         {
-                            // Изменились размеры или проходимость клетки.
                             layerChanged = true;
                         }
                     }
@@ -147,7 +146,7 @@ namespace Po_Griby.MapSystem
             if (playerDefinition == null)
             {
                 throw new FormatException(
-                    "У файлі entity-definitions.txt немає опису сутності класу Player.");
+                    "У файлі entities.json немає опису сутності типу Player.");
             }
 
             foreach (string line in lines)
