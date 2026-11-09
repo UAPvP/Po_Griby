@@ -99,9 +99,6 @@ namespace Po_Griby.Gameplay
 
         public Inventory PlayerInventory { get; } = new();
         public Enemy? PendingBattle { get; set; }
-        
-        public Enemy? PendingBattle { get; set; }
-        public List<MushroomItem> Inventory { get; } = new();
         public Player(char symbol, Vector2D position) : base(symbol, position)
         {
             ApplyData(PlayerStorage.Load("player.json"));
@@ -114,8 +111,14 @@ namespace Po_Griby.Gameplay
             AttackDamage = data.AttackDamage;
             DefenseSpeed = data.DefenseSpeed;
             DefenseShield = data.DefenseShield;
-            Inventory.AddRange(data.Inventory.Select(item =>
-                new MushroomItem(item.Name, item.Description, item.HealingValue)));
+            PlayerInventory.Clear();
+            foreach (MushroomItemData item in data.Inventory)
+            {
+                int value = item.Value != 0 || item.HealingValue == 0
+                    ? item.Value
+                    : item.HealingValue;
+                PlayerInventory.AddItem(new MushroomItem(item.Name, item.Type, value, item.Description));
+            }
         }
 
         public void TakeDamage(int damage)
@@ -135,9 +138,9 @@ namespace Po_Griby.Gameplay
             AttackDamage = other.AttackDamage;
             DefenseSpeed = other.DefenseSpeed;
             DefenseShield = other.DefenseShield;
-            Inventory.Clear();
-            Inventory.AddRange(other.Inventory.Select(item =>
-                new MushroomItem(item.Name, item.Description, item.HealingValue)));
+            PlayerInventory.Clear();
+            foreach (MushroomItem item in other.PlayerInventory.Items)
+                PlayerInventory.AddItem(new MushroomItem(item.Name, item.Type, item.Value, item.Description));
         }
     }
 
@@ -377,19 +380,4 @@ namespace Po_Griby.Gameplay
         }
     }
 
-    public class MushroomItem
-    {
-        public string Name { get; }
-        public string Description { get; }
-        public int HealingValue { get; }
-
-        public MushroomItem(string name, string description, int healingValue)
-        {
-            Name = name;
-            Description = description;
-            HealingValue = healingValue;
-        }
-
-        public void Use(Player player) => player.Heal(HealingValue);
-    }
 }

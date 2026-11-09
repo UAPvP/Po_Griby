@@ -16,6 +16,8 @@ namespace Po_Griby.Gameplay
     {
         public string Name { get; set; } = "";
         public string Description { get; set; } = "";
+        public ItemType Type { get; set; } = ItemType.Heal;
+        public int Value { get; set; }
         public int HealingValue { get; set; }
     }
 
@@ -52,10 +54,12 @@ namespace Po_Griby.Gameplay
                 AttackDamage = player.AttackDamage,
                 DefenseSpeed = player.DefenseSpeed,
                 DefenseShield = player.DefenseShield,
-                Inventory = player.Inventory.Select(item => new MushroomItemData
+                Inventory = player.PlayerInventory.Items.Select(item => new MushroomItemData
                 {
                     Name = item.Name,
                     Description = item.Description,
+                    Type = item.Type,
+                    Value = item.Value,
                     HealingValue = item.HealingValue
                 }).ToList()
             };

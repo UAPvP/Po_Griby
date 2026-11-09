@@ -6,7 +6,7 @@ namespace Po_Griby
 {
     public class FightSystem
     {
-        public static bool StartBattle(Player player, Enemy enemy, List<MushroomItem> inventory)
+        public static bool StartBattle(Player player, Enemy enemy, Inventory inventory)
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
@@ -37,23 +37,23 @@ namespace Po_Griby
                 }
                 else if (choice == "2")
                 {
-                    if (inventory.Count == 0)
+                    if (inventory.Items.Count == 0)
                     {
                         Console.WriteLine("\nУ вашому інвентарі немає предметів! Ви пропускаєте хід.");
                     }
                     else
                     {
                         Console.WriteLine("\nОберіть предмет:");
-                        for (int i = 0; i < inventory.Count; i++)
+                        for (int i = 0; i < inventory.Items.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {inventory[i].Name} ({inventory[i].Description})");
+                            Console.WriteLine($"{i + 1}. {inventory.Items[i].Name} ({inventory.Items[i].Description})");
                         }
                         Console.Write("> ");
-                        if (int.TryParse(Console.ReadLine(), out int itemIdx) && itemIdx > 0 && itemIdx <= inventory.Count)
+                        if (int.TryParse(Console.ReadLine(), out int itemIdx) && itemIdx > 0 && itemIdx <= inventory.Items.Count)
                         {
-                            var item = inventory[itemIdx - 1];
+                            var item = inventory.Items[itemIdx - 1];
                             item.Use(player);
-                            inventory.RemoveAt(itemIdx - 1);
+                            inventory.RemoveItem(itemIdx - 1);
                         }
                         else
                         {

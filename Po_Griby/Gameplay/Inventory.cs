@@ -18,6 +18,7 @@ namespace Po_Griby.Gameplay
         public ItemType Type { get; }
         public int Value { get; }
         public string Description { get; }
+        public int HealingValue => Type == ItemType.Heal ? Value : 0;
 
         public MushroomItem(string name, ItemType type, int value, string description)
         {
@@ -75,6 +76,11 @@ namespace Po_Griby.Gameplay
         public void AddItem(MushroomItem item)
         {
             items.Add(item);
+        }
+
+        public void Clear()
+        {
+            items.Clear();
         }
 
         public void RemoveItem(int index)

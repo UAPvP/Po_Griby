@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Po_Griby;
 using Po_Griby.Gameplay;
 using Po_Griby.Interface;
 using Po_Griby.Logging;
@@ -108,7 +109,7 @@ class Program
                 {
                     Enemy enemyToFight = player.PendingBattle;
                     player.PendingBattle = null;
-                    bool playerWon = FightSystem.StartBattle(player, enemyToFight, player.Inventory);
+                    bool playerWon = FightSystem.StartBattle(player, enemyToFight, player.PlayerInventory);
                     logger.Log(playerWon ? LogLevel.Info : LogLevel.Warning,
                         playerWon ? "Гравець переміг у бою." : "Гравець програв бій.");
                     Console.Clear();
