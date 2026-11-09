@@ -1,0 +1,23 @@
+{
+  "Health": 20,
+  "AttackSpeed": 3,
+  "AttackDamage": 5,
+  "DefenseSpeed": 2,
+  "DefenseShield": 0,
+  "Inventory": [
+    {
+      "Name": "\u0411\u0456\u043B\u0438\u0439 \u0433\u0440\u0438\u0431",
+      "Description": "\u0412\u0456\u0434\u043D\u043E\u0432\u043B\u044E\u0454 10 HP",
+      "Type": 0,
+      "Value": 10,
+      "HealingValue": 10
+    },
+    {
+      "Name": "\u041C\u0443\u0445\u043E\u043C\u043E\u0440",
+      "Description": "\u0414\u0438\u0432\u043D\u0438\u0439 \u0433\u0440\u0438\u0431...",
+      "Type": 0,
+      "Value": 5,
+      "HealingValue": 5
+    }
+  ]
+}
