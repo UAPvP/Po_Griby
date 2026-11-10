@@ -82,10 +82,10 @@ class Program
 
                     switch (key)
                     {
-                        case ConsoleKey.W: player.MoveUp(map); break;
-                        case ConsoleKey.A: player.MoveLeft(map); break;
-                        case ConsoleKey.S: player.MoveDown(map); break;
-                        case ConsoleKey.D: player.MoveRight(map); break;
+                        case ConsoleKey.W: player.MoveUp(map, logger); break;
+                        case ConsoleKey.A: player.MoveLeft(map, logger); break;
+                        case ConsoleKey.S: player.MoveDown(map, logger); break;
+                        case ConsoleKey.D: player.MoveRight(map, logger); break;
                         case ConsoleKey.Q:
                             logger.Log(LogLevel.Info, "Гравець вийшов з гри.");
                             isRunning = false;
@@ -106,6 +106,8 @@ class Program
                     player.PlayerInventory.AddItem(item.ToInventoryItem());
                     map.GetEntityMap().Remove(item);
                     player.PendingPickup = null;
+                    logger.Log(LogLevel.Info,
+                        $"Гравець підібрав предмет {item.Name} ({item.Symbol}) у ({item.Position.x}, {item.Position.y}).");
                     shouldRender = true;
                 }
 
@@ -143,11 +145,14 @@ class Program
                 bool tickElapsed = gameClock.ElapsedMilliseconds >= nextTickAt;
                 if (tickElapsed)
                 {
-                    foreach (MovingCharacter entity in map.GetEntityMap().Entities
-                                 .OfType<MovingCharacter>()
-                                 .ToArray())
+                    MovingCharacter[] movingEntities = map.GetEntityMap().Entities
+                        .OfType<MovingCharacter>()
+                        .ToArray();
+                    logger.Log(LogLevel.Debug, $"Тік світу: оновлення сутностей ({movingEntities.Length}).");
+
+                    foreach (MovingCharacter entity in movingEntities)
                     {
-                        entity.Move(map, player);
+                        entity.Move(map, player, logger);
                     }
 
                     // Один тик за цикл: якщо обработка задержалась (например, во время боя),

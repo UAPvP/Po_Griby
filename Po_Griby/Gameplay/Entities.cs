@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Po_Griby.Logging;
 using Po_Griby.MapSystem;
 
 namespace Po_Griby.Gameplay
@@ -48,45 +49,57 @@ namespace Po_Griby.Gameplay
     {
         protected Character(char symbol, Vector2D position) : base(symbol, position) { }
 
-        public bool TryMove(FinalMap map, Vector2D position)
+        public bool TryMove(FinalMap map, Vector2D position, Logger? logger = null)
         {
             bool isNPC = this is not Player;
 
             if (!map.IsTileWalkable(position, isNPC))
+            {
+                logger?.Log(LogLevel.Debug,
+                    $"{GetType().Name} ({Symbol}) не може пройти в ({position.x}, {position.y}): непрохідна клітинка.");
                 return false;
+            }
 
             Entity? entity = map.GetEntityAt(position);
 
             if (entity != null)
             {
                 if (this is Player player)
-                    map.SetMessage(entity.Interact(player));
+                {
+                    string? message = entity.Interact(player);
+                    map.SetMessage(message);
+                    logger?.Log(LogLevel.Info,
+                        $"Гравець взаємодіє із сутністю {entity.GetType().Name} ({entity.Symbol}) у ({position.x}, {position.y}). Повідомлення: {message}");
+                }
 
                 return false;
             }
 
+            Vector2D previousPosition = Position;
             Position = position;
+            logger?.Log(LogLevel.Info,
+                $"{GetType().Name} ({Symbol}) перемістився з ({previousPosition.x}, {previousPosition.y}) у ({Position.x}, {Position.y}).");
             return true;
         }
 
-        public bool MoveUp(FinalMap map)
+        public bool MoveUp(FinalMap map, Logger? logger = null)
         {
-            return TryMove(map, Position + new Vector2D(0, -1));
+            return TryMove(map, Position + new Vector2D(0, -1), logger);
         }
 
-        public bool MoveDown(FinalMap map)
+        public bool MoveDown(FinalMap map, Logger? logger = null)
         {
-            return TryMove(map, Position + new Vector2D(0, 1));
+            return TryMove(map, Position + new Vector2D(0, 1), logger);
         }
 
-        public bool MoveLeft(FinalMap map)
+        public bool MoveLeft(FinalMap map, Logger? logger = null)
         {
-            return TryMove(map, Position + new Vector2D(-1, 0));
+            return TryMove(map, Position + new Vector2D(-1, 0), logger);
         }
 
-        public bool MoveRight(FinalMap map)
+        public bool MoveRight(FinalMap map, Logger? logger = null)
         {
-            return TryMove(map, Position + new Vector2D(1, 0));
+            return TryMove(map, Position + new Vector2D(1, 0), logger);
         }
 
         public override string? Interact(Player target)
@@ -133,8 +146,11 @@ namespace Po_Griby.Gameplay
             return Position + new Vector2D(0, Math.Sign(dy));
         }
 
-        public void Move(FinalMap map, Player player)
+        public void Move(FinalMap map, Player player, Logger? logger = null)
         {
+            logger?.Log(LogLevel.Debug,
+                $"Оновлення сутності {GetType().Name} ({Symbol}) за патерном {MovePattern} у ({Position.x}, {Position.y}).");
+
             Vector2D target = MovePattern switch
             {
                 MovePattern.Stationary => Position,
@@ -160,7 +176,10 @@ namespace Po_Griby.Gameplay
             Entity? blockingEntity = map.GetEntityAt(target);
             if (blockingEntity is Player targetPlayer)
             {
-                map.SetMessage(Interact(targetPlayer));
+                string? message = Interact(targetPlayer);
+                map.SetMessage(message);
+                logger?.Log(LogLevel.Info,
+                    $"Сутність {GetType().Name} ({Symbol}) взаємодіє з гравцем у ({target.x}, {target.y}). Повідомлення: {message}");
                 return;
             }
 
@@ -176,10 +195,16 @@ namespace Po_Griby.Gameplay
                     circleSideSteps = 0;
                 }
 
+                logger?.Log(LogLevel.Debug,
+                    $"{GetType().Name} ({Symbol}) не перемістився у ({target.x}, {target.y}): клітинка заблокована.");
+
                 return;
             }
 
+            Vector2D previousPosition = Position;
             Position = target;
+            logger?.Log(LogLevel.Info,
+                $"{GetType().Name} ({Symbol}) перемістився з ({previousPosition.x}, {previousPosition.y}) у ({Position.x}, {Position.y}).");
 
             if (MovePattern == MovePattern.Circle)
             {
