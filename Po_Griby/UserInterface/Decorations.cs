@@ -333,7 +333,7 @@ namespace Po_Griby.UserInterface
 
             cursor.tp_Cursor(48, 7);
             delay_text.PrintText("WELCOME TO FOREST");
-            
+            /*
             cursor.tp_Cursor(34, 9);
             delay_text.PrintText("Чи боялися ви коли-небудь ходити в ліс?     ");
             forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
@@ -422,7 +422,7 @@ namespace Po_Griby.UserInterface
             forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
             cursor.tp_Cursor(48, 7);
             Console.ForegroundColor = ConsoleColor.Red;
-
+            */
             delay_text.PrintText_s("Через декілька годин     ");
 
             Console.Clear();

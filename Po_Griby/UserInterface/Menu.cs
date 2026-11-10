@@ -54,9 +54,9 @@ namespace Po_Griby.Interface
             snow.UpdateSnow();
             forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
 
-            cursor.tp_Cursor(48, 7);
+            cursor.tp_Cursor(47, 7);
             Console.WriteLine(Header);
-            cursor.tp_Cursor(53, 9);
+            cursor.tp_Cursor(50, 9);
 
             int row = 0;
             foreach (MenuSection section in sections)
@@ -66,7 +66,7 @@ namespace Po_Griby.Interface
                 {
                     int y = 11 + row * 2;
                     optionYPositions.Add(y);
-                    cursor.tp_Cursor(52, y);
+                    cursor.tp_Cursor(55, y);
                     Console.WriteLine(option.name);
                     row++;
                 }
@@ -75,7 +75,7 @@ namespace Po_Griby.Interface
             if (optionYPositions.Count > 0)
             {
                 selectedIndex = Math.Clamp(selectedIndex, 0, optionYPositions.Count - 1);
-                textCursor.PrintText(49, optionYPositions[selectedIndex], "-->");
+                textCursor.PrintText(53, optionYPositions[selectedIndex], "-->");
             }
         }
 

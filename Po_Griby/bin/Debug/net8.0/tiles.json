@@ -1,1 +1,76 @@
-{"Tiles":[{"Symbol":".","Color":7,"IsWalkable":true,"IsNPCWalkable":true},{"Symbol":"#","Color":8,"IsWalkable":false,"IsNPCWalkable":false},{"Symbol":"~","Color":9,"IsWalkable":false,"IsNPCWalkable":false},{"Symbol":"G","Color":10,"IsWalkable":true,"IsNPCWalkable":true},{"Symbol":"^","Color":6,"IsWalkable":true,"IsNPCWalkable":false}]}
+{
+  "Tiles": [
+    {
+      "Symbol": ".",
+      "Color": 10,
+      "IsWalkable": true,
+      "IsNPCWalkable": true
+    },
+    {
+      "Symbol": "#",
+      "Color": 8,
+      "IsWalkable": false,
+      "IsNPCWalkable": false
+    },
+    {
+      "Symbol": "~",
+      "Color": 9,
+      "IsWalkable": false,
+      "IsNPCWalkable": false
+    },
+    {
+      "Symbol": "G",
+      "Color": 10,
+      "IsWalkable": true,
+      "IsNPCWalkable": true
+    },
+    {
+      "Symbol": "^",
+      "Color": 6,
+      "IsWalkable": true,
+      "IsNPCWalkable": false
+    },
+    {
+      "Symbol": "-",
+      "Color": 6,
+      "IsWalkable": true,
+      "IsNPCWalkable": true
+    },
+    {
+      "Symbol": "|",
+      "Color": 6,
+      "IsWalkable": true,
+      "IsNPCWalkable": true
+    },
+    {
+      "Symbol": "Ш",
+      "Color": 2,
+      "IsWalkable": true,
+      "IsNPCWalkable": true
+    },
+    {
+      "Symbol": "ш",
+      "Color": 10,
+      "IsWalkable": true,
+      "IsNPCWalkable": true
+    },
+    {
+      "Symbol": "W",
+      "Color": 14,
+      "IsWalkable": true,
+      "IsNPCWalkable": true
+    },
+    {
+      "Symbol": "w",
+      "Color": 14,
+      "IsWalkable": true,
+      "IsNPCWalkable": true
+    },
+    {
+      "Symbol": "@",
+      "Color": 2,
+      "IsWalkable": false,
+      "IsNPCWalkable": false
+    }
+  ]
+}

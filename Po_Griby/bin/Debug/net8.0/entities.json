@@ -1,1 +1,60 @@
-{"Entities":[{"Symbol":"P","Color":"Gray","Type":"Player","Dialogue":null,"Target":null},{"Symbol":"E","Color":"Red","Type":"BasicNPC","Dialogue":"\u0412\u0456\u0442\u0430\u044E! \u041B\u0430\u0441\u043A\u0430\u0432\u043E \u043F\u0440\u043E\u0441\u0438\u043C\u043E.","Target":null},{"Symbol":"N","Color":"Green","Type":"BasicNPC","Dialogue":"\u041D\u0430 \u043F\u0456\u0432\u043D\u043E\u0447\u0456 \u0454 \u0433\u0440\u0438\u0431\u043D\u0438\u0439 \u043B\u0456\u0441, \u0456 \u0442\u0430\u043C \u0436\u0438\u0432\u0443\u0442\u044C NPC.","Target":null},{"Symbol":"m","Color":"DarkRed","Type":"FalseBoletus","Dialogue":null,"Target":null},{"Symbol":"p","Color":"Yellow","Type":"PuffballMushroom","Dialogue":null,"Target":null},{"Symbol":"B","Color":"DarkYellow","Type":"WildBoar","Dialogue":null,"Target":null},{"Symbol":"W","Color":"DarkGray","Type":"WolfPack","Dialogue":null,"Target":null},{"Symbol":"M","Color":"Magenta","Type":"BearMiniBoss","Dialogue":null,"Target":null}]}
+{
+  "Entities": [
+    {
+      "Symbol": "P",
+      "Color": "Gray",
+      "Type": "Player",
+      "Dialogue": null,
+      "Target": null
+    },
+    {
+      "Symbol": "E",
+      "Color": "Red",
+      "Type": "BasicNPC",
+      "Dialogue": "Вітаю! Ласкаво просимо.",
+      "Target": null
+    },
+    {
+      "Symbol": "N",
+      "Color": "Green",
+      "Type": "BasicNPC",
+      "Dialogue": "На півночі є грибний ліс, і там живуть NPC.",
+      "Target": null
+    },
+    {
+      "Symbol": "m",
+      "Color": "DarkRed",
+      "Type": "FalseBoletus",
+      "Dialogue": null,
+      "Target": null
+    },
+    {
+      "Symbol": "p",
+      "Color": "Yellow",
+      "Type": "PuffballMushroom",
+      "Dialogue": null,
+      "Target": null
+    },
+    {
+      "Symbol": "B",
+      "Color": "DarkYellow",
+      "Type": "WildBoar",
+      "Dialogue": null,
+      "Target": null
+    },
+    {
+      "Symbol": "W",
+      "Color": "DarkGray",
+      "Type": "WolfPack",
+      "Dialogue": null,
+      "Target": null
+    },
+    {
+      "Symbol": "M",
+      "Color": "Magenta",
+      "Type": "BearMiniBoss",
+      "Dialogue": null,
+      "Target": null
+    }
+  ]
+}
