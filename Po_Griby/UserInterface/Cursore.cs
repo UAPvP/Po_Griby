@@ -57,21 +57,36 @@ namespace Po_Griby.UserInterface
 
     public class delay_text
     {
+        public static bool Skip = false;
+
         public static void PrintText(string text, int delay = 50)
         {
             foreach (char letter in text)
             {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+
+                    if (key.Key == ConsoleKey.S)
+                    {
+                        Skip = true;
+                    }
+                }
+
+                if (Skip)
+                {
+                    Console.Write(text.Substring(text.IndexOf(letter)));
+                    return;
+                }
+
                 Console.Write(letter);
                 System.Threading.Thread.Sleep(delay);
             }
         }
+
         public static void PrintText_s(string text, int delay = 200)
         {
-            foreach (char letter in text)
-            {
-                Console.Write(letter);
-                System.Threading.Thread.Sleep(delay);
-            }
+            PrintText(text, delay);
         }
     }
 

@@ -34,9 +34,8 @@ class Program
             mainSection.AddOption("📖 ПРАВИЛА", "Керування та правила", () =>
             {
                 Console.Clear();
-                Console.WriteLine("Ну принципі правила тута прості, виживи , а там уже далі по ситуації \n" +
-                    "якщо хочеш то можеш кидатися грибами , бажано битись з ворогами(хто буде ворогом а хто ні там якось в процесі розберешся\nКерування: W — вгору, A — ліворуч, S — вниз, D — праворуч, Q — вихід.\n" +
-                                  "Зіткніться з ворогом, щоб почати бій. У бою можна атакувати, використати гриб або втекти.\n ну напевно удачі любий гравець");
+                Console.WriteLine("Керування: W — вгору, A — ліворуч, S — вниз, D — праворуч, Q — вихід.\n" +
+                                  "Зіткніться з ворогом, щоб почати бій. У бою можна атакувати, використати гриб або втекти.");
                 Console.WriteLine("\nНатисніть будь-яку клавішу, щоб повернутися до меню...");
                 Console.ReadKey(true);
             });
@@ -72,6 +71,7 @@ class Program
             var gameClock = System.Diagnostics.Stopwatch.StartNew();
             long nextTickAt = tickIntervalMs;
             bool shouldRender = true;
+            InterfaceMenu interfaceMenu = new InterfaceMenu(player.PlayerInventory);
 
             while (isRunning)
             {
@@ -167,8 +167,14 @@ class Program
                 {
                     Console.SetCursorPosition(0, 0);
                     map.Show();
-                    Console.WriteLine();
-                    Console.WriteLine("Керування: W — вгору, A — ліворуч, S — вниз, D — праворуч, Q — вихід.");
+
+                    interfaceMenu.Show_I();
+
+                    interfaceMenu.Show_D();
+
+                    interfaceMenu.Show_T();
+
+                    Console.SetCursorPosition(0, 29);
 
                     int messageWidth = Math.Max(1, Console.WindowWidth - 1);
                     string message = map.LastMessage;

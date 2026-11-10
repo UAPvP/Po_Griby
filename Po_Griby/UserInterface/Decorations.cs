@@ -141,7 +141,7 @@ namespace Po_Griby.UserInterface
                 int center = width / 2;
 
 
-
+                PrintTree(-15, 13, 17, TreeColor1);
                 PrintTree(3, 10, 16, TreeColor1);
                 PrintTree(13, 8, 16, TreeColor2);
                 PrintTree(25, 7, 12, TreeColor1);
@@ -184,7 +184,7 @@ namespace Po_Griby.UserInterface
                     PrintAtSafe(right, y, "\\");
                 }
 
-                PrintTree(-15, 13, 17, TreeColor1);
+                
 
 
                 AnimateSteps();
@@ -323,112 +323,165 @@ namespace Po_Griby.UserInterface
 
     public class  game_plot
     {
+        private bool skip = false;
         Decorations.ForestAnimation forest = new();
         Decorations.ForestAnimation2 forest2 = new();
-        public void plot ()
+
+        public void plot()
         {
+            skip = false;
+
             Cursore cursor = new();
+
+            while (!skip)
+            {
+                
+
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+
+                    if (key.Key == ConsoleKey.S)
+                    {
+                        skip = true;
+                    }
+                }
+
+                if (skip)
+                    break;
+
+                Console.Clear();
+                cursor.tp_Cursor(10, 7);
+                delay_text.PrintText("Щоб пропустити заставку (що не рекомендується для повного розуміння сюжету) натисни - S -");
+
+                Console.Clear();
+
+                cursor.tp_Cursor(48, 9);
+                delay_text.PrintText("Команда розробки");
+                cursor.tp_Cursor(30, 10);
+                delay_text.PrintText("(Люди які не спали ночами(і не тільки) щоб цей код нарешті запрацював)");
+                cursor.tp_Cursor(20, 11);
+                delay_text.PrintText("(Для пристойності їхній нервовій системі можна віддати честь за те що вона витримала)");
+
+                cursor.tp_Cursor(48, 13);
+                delay_text.PrintText("Новицький Вячеслав");
+                cursor.tp_Cursor(48, 15);
+                delay_text.PrintText("Лотоцька Марія"); 
+                cursor.tp_Cursor(48, 17);
+                delay_text.PrintText("Рубцов Андрій");
+                cursor.tp_Cursor(48, 19);
+                delay_text.PrintText("Глуський Алан");
+                cursor.tp_Cursor(48, 20);
+                delay_text.PrintText("         ");
+                Console.Clear();
+
+                cursor.tp_Cursor(48, 9);
+                delay_text.PrintText("Бажаємо успіху в грі,");
+                cursor.tp_Cursor(37, 10);
+                delay_text.PrintText("та приємних вражень від перегляду");
+                //***************
+                Console.Clear();
+                forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
+
+                cursor.tp_Cursor(48, 7);
+                delay_text.PrintText("WELCOME TO FOREST");
+
+                cursor.tp_Cursor(34, 9);
+                delay_text.PrintText("Чи боялися ви коли-небудь ходити в ліс?     ");
+                forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
+                cursor.tp_Cursor(35, 10);
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                delay_text.PrintText_s("Ні?");
+                forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
+                Console.ForegroundColor = ConsoleColor.White;
+                cursor.tp_Cursor(34, 11);
+                delay_text.PrintText("А варто було б,");
+                cursor.tp_Cursor(34, 12);
+                delay_text.PrintText("хто знає чи після одної такої прогулянки ти повернешся до дому...");
+                cursor.tp_Cursor(34, 13);
+                delay_text.PrintText("і чи взагалі виберешся звідти ...");
+                forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
+                cursor.tp_Cursor(64, 13);
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                delay_text.PrintText_s("живим");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.Clear();
+                forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
+                cursor.tp_Cursor(48, 7);
+                Console.WriteLine("WELCOME TO FOREST");
+
+                cursor.tp_Cursor(34, 9);
+                delay_text.PrintText("Звичайний пасмурний день, дощ паріщив як з відра,");
+                cursor.tp_Cursor(34, 10);
+                delay_text.PrintText("а це значить що в лісі грибів буде вдосталь.");
+                cursor.tp_Cursor(34, 11);
+                delay_text.PrintText("Ти зібрався, вдягнувся, взяв телефон, ");
+                cursor.tp_Cursor(34, 12);
+                delay_text.PrintText("в рюкзак запихнув перше що попалось під руку:");
+                cursor.tp_Cursor(34, 13);
+                delay_text.PrintText("пачку печеня, домашній ніж який вже давно бажано було заточити    ");
+                cursor.tp_Cursor(34, 14);
+                delay_text.PrintText("і аптечку");
+                cursor.tp_Cursor(34, 15);
+                delay_text.PrintText("ти вже й не пам'ятаєш коли останній раз виходив кудись без неї,  ");
+                cursor.tp_Cursor(34, 16);
+                delay_text.PrintText("анемія все     ");
+                forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
+                cursor.tp_Cursor(35, 17);
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                delay_text.PrintText_s("прогресує й прогресує");
+                forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.Clear();
+
+                forest2.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
+
+                Console.Clear();
+
+                Console.Clear();
+                forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
+                cursor.tp_Cursor(48, 7);
+                Console.WriteLine("WELCOME TO FOREST");
+
+                cursor.tp_Cursor(34, 9);
+                delay_text.PrintText("І ось ти в лісі, на диво тут доволі...");
+                forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
+                cursor.tp_Cursor(35, 10);
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                delay_text.PrintText_s("Тихо");
+                forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
+                Console.ForegroundColor = ConsoleColor.White;
+                cursor.tp_Cursor(34, 11);
+                delay_text.PrintText("Ти спокійно ходиш по лісу, навіть знайшов ");
+                cursor.tp_Cursor(34, 12);
+                delay_text.PrintText("Декілька красивих білих грибів");
+                cursor.tp_Cursor(34, 13);
+                delay_text.PrintText("В моменті ти підскакуєш від блискавки яка вдарила за метрів 30 від тебе");
+                cursor.tp_Cursor(34, 14);
+                delay_text.PrintText("Ти не втримав рівновагу й впав покотившись в невелику прірву позаду тебе");
+                cursor.tp_Cursor(34, 15);
+                delay_text.PrintText("Впавши ти сильно вдарився в голову, через хворобу ти ітак був ослаблений,");
+                cursor.tp_Cursor(34, 16);
+                delay_text.PrintText("І навіть такий невеличкий удар зміг позбавити тебе свідомості...");
+                delay_text.PrintText_s("     ");
+                Console.Clear();
+                forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
+                cursor.tp_Cursor(48, 7);
+                Console.ForegroundColor = ConsoleColor.Red;
+                
+                delay_text.PrintText_s("Через декілька годин     ");
+
+                break;
+            }
+
             Console.Clear();
-            forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
-
-            cursor.tp_Cursor(48, 7);
-            delay_text.PrintText("WELCOME TO FOREST");
-            /*
-            cursor.tp_Cursor(34, 9);
-            delay_text.PrintText("Чи боялися ви коли-небудь ходити в ліс?     ");
-            forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
-            cursor.tp_Cursor(35, 10);
-            Console.ForegroundColor = ConsoleColor.Red;
-            
-            delay_text.PrintText_s("Ні?");
-            forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
-            Console.ForegroundColor = ConsoleColor.White;
-            cursor.tp_Cursor(34, 11);
-            delay_text.PrintText("А варто було б,");
-            cursor.tp_Cursor(34, 12);
-            delay_text.PrintText("хто знає чи після одної такої прогулянки ти повернешся до дому...");
-            cursor.tp_Cursor(34, 13);
-            delay_text.PrintText("і чи взагалі виберешся звідти ...");
-            forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
-            cursor.tp_Cursor(64, 13);
-            Console.ForegroundColor = ConsoleColor.Red;
-            
-            delay_text.PrintText_s("живим");
-            Console.ForegroundColor = ConsoleColor.White;
-
-            Console.Clear();
-            forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
-            cursor.tp_Cursor(48, 7);
-            Console.WriteLine("WELCOME TO FOREST");
-
-            cursor.tp_Cursor(34, 9);
-            delay_text.PrintText("Звичайний пасмурний день, дощ паріщив як з відра,");
-            cursor.tp_Cursor(34, 10);
-            delay_text.PrintText("а це значить що в лісі грибів буде вдосталь.");
-            cursor.tp_Cursor(34, 11);
-            delay_text.PrintText("Ти зібрався, вдягнувся, взяв телефон, ");
-            cursor.tp_Cursor(34, 12);
-            delay_text.PrintText("в рюкзак запихнув перше що попалось під руку:");
-            cursor.tp_Cursor(34, 13);
-            delay_text.PrintText("пачку печеня, домашній ніж який вже давно бажано було заточити    ");
-            cursor.tp_Cursor(34, 14);
-            delay_text.PrintText("і аптечку");
-            cursor.tp_Cursor(34, 15);
-            delay_text.PrintText("ти вже й не пам'ятаєш коли останній раз виходив кудись без неї,  ");
-            cursor.tp_Cursor(34, 16);
-            delay_text.PrintText("анемія все     ");
-            forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
-            cursor.tp_Cursor(35, 17);
-            Console.ForegroundColor = ConsoleColor.Red;
-
-            delay_text.PrintText_s("прогресує й прогресує");
-            forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
-            Console.ForegroundColor = ConsoleColor.White;
-            
-            Console.Clear();
-
-            forest2.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
-
-            Console.Clear();
-
-            Console.Clear();
-            forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
-            cursor.tp_Cursor(48, 7);
-            Console.WriteLine("WELCOME TO FOREST");
-
-            cursor.tp_Cursor(34, 9);
-            delay_text.PrintText("І ось ти в лісі, на диво тут доволі...");
-            forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
-            cursor.tp_Cursor(35, 10);
-            Console.ForegroundColor = ConsoleColor.Red;
-
-            delay_text.PrintText_s("Тихо");
-            forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
-            Console.ForegroundColor = ConsoleColor.White;
-            cursor.tp_Cursor(34, 11);
-            delay_text.PrintText("Ти спокійно ходиш по лісу, навіть знайшов ");
-            cursor.tp_Cursor(34, 12);
-            delay_text.PrintText("Декілька красивих білих грибів");
-            cursor.tp_Cursor(34, 13);
-            delay_text.PrintText("В моменті ти підскакуєш від блискавки яка вдарила за метрів 30 від тебе");
-            cursor.tp_Cursor(34, 14);
-            delay_text.PrintText("Ти не втримав рівновагу й впав покотившись в невелику прірву позаду тебе");
-            cursor.tp_Cursor(34, 15);
-            delay_text.PrintText("Впавши ти сильно вдарився в голову, через хворобу ти ітак був ослаблений,");
-            cursor.tp_Cursor(34, 16);
-            delay_text.PrintText("І навіть такий невеличкий удар зміг позбавити тебе свідомості...");
-            delay_text.PrintText_s("     ");
-            Console.Clear();
-            forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
-            cursor.tp_Cursor(48, 7);
-            Console.ForegroundColor = ConsoleColor.Red;
-            */
-            delay_text.PrintText_s("Через декілька годин     ");
-
-            Console.Clear();
-
         }
-
 
     }
 

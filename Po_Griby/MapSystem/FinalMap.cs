@@ -106,7 +106,8 @@ namespace Po_Griby.MapSystem
                 }
 
                 Console.ResetColor();
-                Console.WriteLine();
+                if (y < height - 1)
+                    Console.WriteLine();
             }
 
             Console.ResetColor();

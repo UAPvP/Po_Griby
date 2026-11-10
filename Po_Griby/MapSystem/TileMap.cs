@@ -17,7 +17,10 @@ namespace Po_Griby.MapSystem
         {
             if (File.Exists(filePath))
             {
-                string[] lines = File.ReadAllLines(filePath);
+                string[] lines = File.ReadAllLines(filePath)
+                    .Where(line => !string.IsNullOrWhiteSpace(line))
+                    .ToArray();
+
 
                 height = lines.Length;
                 width = lines.Length > 0 ? lines.Max(line => line.Length) : 0;
@@ -64,7 +67,7 @@ namespace Po_Griby.MapSystem
                     if (i == 0 || i == height - 1 || j == 0 || j == width - 1)
                         map[i, j] = '#';
                     else
-                        map[i, j] = '.';
+                        map[i, j] = ' ';
                 }
             }
         }
@@ -79,7 +82,7 @@ namespace Po_Griby.MapSystem
             {
                 for (int j = 0; j < width; j++)
                 {
-                    map[i, j] = j < lines[i].Length ? lines[i][j] : '.';
+                    map[i, j] = j < lines[i].Length ? lines[i][j] : ' ';
                 }
             }
         }
