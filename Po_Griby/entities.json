@@ -3,10 +3,11 @@
     { "symbol": "P", "color": "Gray", "type": "Player" },
     { "symbol": "E", "color": "Red", "type": "BasicNPC", "dialogue": "Вітаю! Ласкаво просимо." },
     { "symbol": "N", "color": "Green", "type": "BasicNPC", "dialogue": "На півночі є грибний ліс, і там живуть NPC." },
-    { "symbol": "m", "color": "DarkRed", "type": "FalseBoletus" },
+    { "symbol": "g", "color": "Green", "type": "Mushroom", "healingValue": 10 },
+    { "symbol": "m", "color": "DarkRed", "type": "FalseBoletus", "movePattern": "Horizontal" },
     { "symbol": "p", "color": "Yellow", "type": "PuffballMushroom" },
-    { "symbol": "B", "color": "DarkYellow", "type": "WildBoar" },
-    { "symbol": "W", "color": "DarkGray", "type": "WolfPack" },
-    { "symbol": "M", "color": "Magenta", "type": "BearMiniBoss" }
+    { "symbol": "B", "color": "DarkYellow", "type": "WildBoar", "movePattern": "Chase" },
+    { "symbol": "W", "color": "DarkGray", "type": "WolfPack", "movePattern": "Chase" },
+    { "symbol": "M", "color": "Magenta", "type": "BearMiniBoss", "movePattern": "Chase" }
   ]
 }

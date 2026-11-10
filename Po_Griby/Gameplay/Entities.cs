@@ -8,6 +8,14 @@ using Po_Griby.MapSystem;
 
 namespace Po_Griby.Gameplay
 {
+    public enum MovePattern
+    {
+        Stationary,
+        Horizontal,
+        Vertical,
+        Circle,
+        Chase
+    }
     public interface IFightable
     {
         int Health { get; }
@@ -87,6 +95,104 @@ namespace Po_Griby.Gameplay
         }
     }
 
+    public abstract class MovingCharacter : Character
+    {
+        public MovePattern MovePattern { get; set; }
+
+        protected MovingCharacter(char symbol, Vector2D position, MovePattern movePattern = MovePattern.Stationary)
+            : base(symbol, position)
+        {
+            MovePattern = movePattern;
+        }
+        private int horizontalDirection = 1;
+        private int verticalDirection = 1;
+        private int circleDirection = 0;
+        private int circleSideSteps = 0;
+        private const int CircleSideLength = 3;
+
+        private static readonly Vector2D[] SquareDirections =
+        {
+            new(1, 0),
+            new(0, 1),
+            new(-1, 0),
+            new(0, -1)
+        };
+        private Vector2D GetNextCirclePosition()
+        {
+            Vector2D direction = SquareDirections[circleDirection];
+            return Position + direction;
+        }
+        private Vector2D GetNextChasePosition(Player player)
+        {
+            int dx = player.Position.x - Position.x;
+            int dy = player.Position.y - Position.y;
+
+            if (Math.Abs(dx) >= Math.Abs(dy))
+                return Position + new Vector2D(Math.Sign(dx), 0);
+
+            return Position + new Vector2D(0, Math.Sign(dy));
+        }
+
+        public void Move(FinalMap map, Player player)
+        {
+            Vector2D target = MovePattern switch
+            {
+                MovePattern.Stationary => Position,
+
+                MovePattern.Horizontal =>
+                    Position + new Vector2D(horizontalDirection, 0),
+
+                MovePattern.Vertical =>
+                    Position + new Vector2D(0, verticalDirection),
+
+                MovePattern.Circle =>
+                    GetNextCirclePosition(),
+
+                MovePattern.Chase =>
+                    GetNextChasePosition(player),
+
+                _ => Position
+            };
+
+            if (target.x == Position.x && target.y == Position.y)
+                return;
+
+            Entity? blockingEntity = map.GetEntityAt(target);
+            if (blockingEntity is Player targetPlayer)
+            {
+                map.SetMessage(Interact(targetPlayer));
+                return;
+            }
+
+            if (!map.IsTileWalkable(target, isNPC: true) || blockingEntity != null)
+            {
+                if (MovePattern == MovePattern.Horizontal)
+                    horizontalDirection *= -1;
+                else if (MovePattern == MovePattern.Vertical)
+                    verticalDirection *= -1;
+                else if (MovePattern == MovePattern.Circle)
+                {
+                    circleDirection = (circleDirection + 1) % SquareDirections.Length;
+                    circleSideSteps = 0;
+                }
+
+                return;
+            }
+
+            Position = target;
+
+            if (MovePattern == MovePattern.Circle)
+            {
+                circleSideSteps++;
+                if (circleSideSteps >= CircleSideLength)
+                {
+                    circleDirection = (circleDirection + 1) % SquareDirections.Length;
+                    circleSideSteps = 0;
+                }
+            }
+        }
+    }
+
     public class Player : Character, IFightable
     {
         public int Health { get; private set; }
@@ -96,6 +202,7 @@ namespace Po_Griby.Gameplay
         public int DefenseShield { get; private set; }
 
         public MapChanger? PendingMapChange { get; set; }
+        public DroppedItem? PendingPickup { get; set; }
 
         public Inventory PlayerInventory { get; } = new();
         public Enemy? PendingBattle { get; set; }
@@ -144,7 +251,7 @@ namespace Po_Griby.Gameplay
         }
     }
 
-    class BasicNPC : Character
+    class BasicNPC : MovingCharacter
     {
         private readonly string Dialogue;
 
@@ -180,7 +287,7 @@ namespace Po_Griby.Gameplay
         }
     }
 
-    public abstract class Enemy : Character, IFightable
+    public abstract class Enemy : MovingCharacter, IFightable
     {
         public string Name { get; protected set; }
         public int Health { get; protected set; }
@@ -205,7 +312,7 @@ namespace Po_Griby.Gameplay
             player.PendingBattle = this;
             return $"Увага! Ви зустріли ворога: {Name}!";
         }
-        
+
         public virtual void TakeDamage(int damage)
         {
             int actualDamage = damage;
@@ -255,7 +362,13 @@ namespace Po_Griby.Gameplay
             Description = description;
         }
 
-        public override string? Interact(Player player) => $"{Name}: {Description}";
+        public override string? Interact(Player player)
+        {
+            player.PendingPickup = this;
+            return $"Ви підібрали: {Name}.";
+        }
+
+        public abstract MushroomItem ToInventoryItem();
 
         public abstract void Use(Player player);
     }
@@ -274,6 +387,11 @@ namespace Po_Griby.Gameplay
         {
             player.Heal(HealingValue);
             Console.WriteLine($"\nВи з'їли предмет «{Name}» і відновили {HealingValue} HP.");
+        }
+
+        public override MushroomItem ToInventoryItem()
+        {
+            return new MushroomItem(Name, ItemType.Heal, HealingValue, Description);
         }
     }
 
