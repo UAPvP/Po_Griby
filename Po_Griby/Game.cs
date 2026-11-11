@@ -67,42 +67,38 @@ class Program
             logger.Log(LogLevel.Info, "Гравця знайдено, гра починається.");
             bool isRunning = true;
             Console.Clear();
+            const long tickIntervalMs = 200;
+            var gameClock = System.Diagnostics.Stopwatch.StartNew();
+            long nextTickAt = tickIntervalMs;
             bool shouldRender = true;
 
             while (isRunning)
             {
-                if (shouldRender)
+                bool playerInputReceived = false;
+                if (Console.KeyAvailable)
                 {
-                    Console.SetCursorPosition(0, 0);
-                    map.Show();
-                    Console.WriteLine();
-                    Console.WriteLine("Керування: W — вгору, A — ліворуч, S — вниз, D — праворуч, Q — вихід.");
+                    ConsoleKey key = Console.ReadKey(true).Key;
+                    playerInputReceived = true;
 
-                    int messageWidth = Math.Max(1, Console.WindowWidth - 1);
-                    string message = map.LastMessage;
-                    if (message.Length > messageWidth)
-                        message = message.Substring(0, messageWidth);
-                    Console.Write(message.PadRight(messageWidth));
-                    shouldRender = false;
+                    switch (key)
+                    {
+                        case ConsoleKey.W: player.MoveUp(map, logger); break;
+                        case ConsoleKey.A: player.MoveLeft(map, logger); break;
+                        case ConsoleKey.S: player.MoveDown(map, logger); break;
+                        case ConsoleKey.D: player.MoveRight(map, logger); break;
+                        case ConsoleKey.F5:
+                            PlayerStorage.Save("player.json", player);
+                            map.SetMessage("igra sohranena");
+                            logger.Log(LogLevel.Info, "igra sohranena");
+                            shouldRender = true;
+                            break;
+                        case ConsoleKey.Q:
+                            logger.Log(LogLevel.Info, "Гравець вийшов з гри.");
+                            isRunning = false;
+                            break;
+                    }
+
                 }
-
-                ConsoleKey key = Console.ReadKey(true).Key;
-                bool playerCommand = key is ConsoleKey.W or ConsoleKey.A or ConsoleKey.S or ConsoleKey.D;
-                bool playerMoved = false;
-                switch (key)
-                {
-                    case ConsoleKey.W: playerMoved = player.MoveUp(map, logger); break;
-                    case ConsoleKey.A: playerMoved = player.MoveLeft(map, logger); break;
-                    case ConsoleKey.S: playerMoved = player.MoveDown(map, logger); break;
-                    case ConsoleKey.D: playerMoved = player.MoveRight(map, logger); break;
-                    case ConsoleKey.Q:
-                        logger.Log(LogLevel.Info, "Гравець вийшов з гри.");
-                        isRunning = false;
-                        break;
-                }
-
-                if (playerCommand)
-                    shouldRender = true;
 
                 if (!isRunning)
                 {
@@ -119,7 +115,6 @@ class Program
                     logger.Log(LogLevel.Info,
                         $"Гравець підібрав предмет {item.Name} ({item.Symbol}) у ({item.Position.x}, {item.Position.y}).");
                     shouldRender = true;
-                    PlayerStorage.Save("player.json", player);
                 }
 
                 if (player.PendingMapChange != null)
@@ -132,19 +127,6 @@ class Program
                         Console.Clear();
                         shouldRender = true;
                     }
-                }
-
-                if (playerMoved)
-                {
-                    MovingCharacter[] movingEntities = map.GetEntityMap().Entities
-                        .OfType<MovingCharacter>()
-                        .ToArray();
-                    logger.Log(LogLevel.Debug, $"Хід гравця: оновлення сутностей ({movingEntities.Length}).");
-
-                    foreach (MovingCharacter entity in movingEntities)
-                        entity.Move(map, player, logger);
-
-                    shouldRender = true;
                 }
 
                 if (player.PendingBattle != null)
@@ -163,7 +145,26 @@ class Program
                         PlayerStorage.Save("player.json", player);
                         break;
                     }
-                    PlayerStorage.Save("player.json", player);
+                    shouldRender = true;
+                }
+
+                bool tickElapsed = gameClock.ElapsedMilliseconds >= nextTickAt;
+                if (tickElapsed)
+                {
+                    MovingCharacter[] movingEntities = map.GetEntityMap().Entities
+                        .OfType<MovingCharacter>()
+                        .ToArray();
+                    logger.Log(LogLevel.Debug, $"Тік світу: оновлення сутностей ({movingEntities.Length}).");
+
+                    foreach (MovingCharacter entity in movingEntities)
+                    {
+                        entity.Move(map, player, logger);
+                    }
+
+                    // Один тик за цикл: якщо обработка задержалась (например, во время боя),
+                    // не пытаемся проиграть накопившиеся тики подряд.
+                    nextTickAt = gameClock.ElapsedMilliseconds + tickIntervalMs;
+
                     shouldRender = true;
                 }
 
@@ -182,6 +183,10 @@ class Program
                     shouldRender = false;
                 }
 
+                if (playerInputReceived || tickElapsed)
+                    PlayerStorage.Save("player.json", player);
+
+                Thread.Sleep(10);
             }
         }
         catch (Exception error)
