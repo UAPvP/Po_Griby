@@ -351,8 +351,9 @@ namespace Po_Griby.UserInterface
                     break;
 
                 Console.Clear();
+                
                 cursor.tp_Cursor(10, 7);
-                delay_text.PrintText("Щоб пропустити заставку (що не рекомендується для повного розуміння сюжету) натисни - S -");
+                delay_text.PrintText("Щоб пропустити заставку (що не рекомендується для повного розуміння сюжету) натисни - S -             ");
 
                 Console.Clear();
 

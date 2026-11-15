@@ -30,6 +30,11 @@ namespace Po_Griby.MapSystem
             IsNPCWalkable = isNPCWalkable;
         }
 
+        public void SetColor(ConsoleColor color)
+        {
+            Color = color;
+        }
+
         public static Dictionary<char, TileInfo> LoadTiles(string file = "tiles.json")
         {
             if (!File.Exists(file))
@@ -42,15 +47,21 @@ namespace Po_Griby.MapSystem
                         new() { Symbol = '#', Color = ConsoleColor.DarkGray, IsWalkable = false, IsNPCWalkable = false },
                         new() { Symbol = '~', Color = ConsoleColor.Blue, IsWalkable = false, IsNPCWalkable = false },
                         new() { Symbol = 'G', Color = ConsoleColor.Green, IsWalkable = true, IsNPCWalkable = true },
-                        new() { Symbol = '^', Color = ConsoleColor.DarkYellow, IsWalkable = true, IsNPCWalkable = false }
+                        new() { Symbol = '^', Color = ConsoleColor.DarkYellow, IsWalkable = true, IsNPCWalkable = false },
+                  
                     }
                 };
                 SaveTiles(file, defaults);
             }
 
             string json = File.ReadAllText(file);
-            var data = JsonSerializer.Deserialize<TileDefinitionsFile>(json)
-                ?? throw new InvalidDataException("Файл визначень тайлів порожній.");
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var data = JsonSerializer.Deserialize<TileDefinitionsFile>(json, options)
+                            ?? throw new InvalidDataException("Файл визначень тайлів порожній.");
 
             var tiles = new Dictionary<char, TileInfo>();
             foreach (TileDefinition definition in data.Tiles)

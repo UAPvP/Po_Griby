@@ -92,7 +92,10 @@ namespace Po_Griby.MapSystem
                         new() { Symbol = 'p', Color = ConsoleColor.Yellow, Type = "PuffballMushroom" },
                         new() { Symbol = 'B', Color = ConsoleColor.DarkYellow, Type = "WildBoar" },
                         new() { Symbol = 'W', Color = ConsoleColor.DarkGray, Type = "WolfPack" },
-                        new() { Symbol = 'M', Color = ConsoleColor.Magenta, Type = "BearMiniBoss" }
+                        new() { Symbol = 'M', Color = ConsoleColor.Magenta, Type = "BearMiniBoss" },
+                        new() { Symbol = '1', Color = ConsoleColor.White, Type = "MapChanger",Dialogue = "Зміна мапи" ,Target = "map2.txt" },
+                        new() { Symbol = '2', Color = ConsoleColor.White, Type = "MapChanger",Dialogue = "Зміна мапи" ,Target = "map3.txt" },
+                        new() { Symbol = '3', Color = ConsoleColor.White, Type = "MapChanger",Dialogue = "Зміна мапи" ,Target = "map4.txt" }
                     }
                 };
                 Save(filePath, defaults);

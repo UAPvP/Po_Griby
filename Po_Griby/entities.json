@@ -8,6 +8,27 @@
     { "symbol": "p", "color": "Yellow", "type": "PuffballMushroom" },
     { "symbol": "B", "color": "DarkYellow", "type": "WildBoar", "movePattern": "Chase" },
     { "symbol": "W", "color": "DarkGray", "type": "WolfPack", "movePattern": "Chase" },
-    { "symbol": "M", "color": "Magenta", "type": "BearMiniBoss", "movePattern": "Chase" }
+    { "symbol": "M", "color": "Magenta", "type": "BearMiniBoss", "movePattern": "Chase" },
+    {
+      "symbol": "1",
+      "color": "White",
+      "type": "MapChanger",
+      "dialogue": "Зміна мапи",
+      "Target": "map2.txt"
+    },
+    {
+      "symbol": "2",
+      "color": "White",
+      "type": "MapChanger",
+      "dialogue": "Зміна мапи",
+      "Target": "map3.txt"
+    },
+    {
+      "symbol": "3",
+      "color": "White",
+      "type": "MapChanger",
+      "dialogue": "Зміна мапи",
+      "Target": "map4.txt"
+    }
   ]
 }

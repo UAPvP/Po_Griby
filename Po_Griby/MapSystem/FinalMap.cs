@@ -21,6 +21,9 @@ namespace Po_Griby.MapSystem
         {
             tileMap = new TileMap(tileMapFilePath);
             tileDefinitions = TileInfo.LoadTiles(tileDefinitionsFilePath);
+
+            ApplyPalette(Path.GetFileName(tileMapFilePath));
+
             entityDefinitions = EntityPlacement.Load(entityDefinitionsFilePath);
 
             entityMap = new EntityMap(
@@ -29,6 +32,7 @@ namespace Po_Griby.MapSystem
                 entityDefinitions,
                 entityMapFilePath);
         }
+
         public EntityMap GetEntityMap()
         {
             return entityMap;
@@ -37,6 +41,8 @@ namespace Po_Griby.MapSystem
         {
             return tileMap;
         }
+
+
 
         public bool IsTileWalkable(Vector2D position, bool isNPC = false)
         {
@@ -111,6 +117,70 @@ namespace Po_Griby.MapSystem
             }
 
             Console.ResetColor();
+        }
+        private void ApplyPalette(string mapFile)
+        {
+            foreach (var tile in tileDefinitions)
+            {
+                ConsoleColor color = tile.Value.Color;
+
+                switch (mapFile)
+                {
+                    case "map.txt":
+                        break;
+
+                    case "map2.txt":
+                        if (tile.Key == '.' || tile.Key == 'G')
+                            color = ConsoleColor.DarkGreen;
+                        else if (tile.Key == '#')
+                            color = ConsoleColor.DarkGray;
+                        else if (tile.Key == '^')
+                            color = ConsoleColor.DarkGray;
+                        break;
+
+                    case "map3.txt":
+                        if (tile.Key == '.' || tile.Key == 'G')
+                            color = ConsoleColor.DarkMagenta;
+                        else if (tile.Key == '#')
+                            color = ConsoleColor.DarkGray;
+                        else if (tile.Key == 'W')
+                            color = ConsoleColor.Magenta;
+                        else if (tile.Key == 'w')
+                            color = ConsoleColor.DarkMagenta;
+                        else if (tile.Key == 'Ш')
+                            color = ConsoleColor.Cyan;
+                        else if (tile.Key == 'ш')
+                            color = ConsoleColor.DarkCyan;
+                        else if (tile.Key == '@')
+                            color = ConsoleColor.White;
+                        break;
+
+                    case "map4.txt":
+                        if (tile.Key == '.' || tile.Key == 'G')
+                            color = ConsoleColor.DarkCyan;
+                        else if (tile.Key == '#')
+                            color = ConsoleColor.Gray;
+                        else if (tile.Key == '~')
+                            color = ConsoleColor.Cyan;
+                        else if (tile.Key == 'W')
+                            color = ConsoleColor.DarkBlue;
+                        else if (tile.Key == 'w')
+                            color = ConsoleColor.Blue;
+                        else if (tile.Key == 'Ш')
+                            color = ConsoleColor.Cyan;
+                        else if (tile.Key == 'ш')
+                            color = ConsoleColor.DarkCyan;
+                        else if (tile.Key == '@')
+                            color = ConsoleColor.DarkYellow;
+                        else if (tile.Key == '&')
+                            color = ConsoleColor.DarkBlue;
+                        else if (tile.Key == '$')
+                            color = ConsoleColor.Blue;
+                        break;
+                }
+
+                tile.Value.SetColor(color);
+            }
         }
 
     }

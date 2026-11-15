@@ -58,11 +58,12 @@ class Program
 
             Player? player = FindPlayer(map);
             if (player == null)
-            {
+            { 
                 logger.Log(LogLevel.Warning, "На мапі не знайдено гравця.");
                 Console.WriteLine("На мапі немає гравця. Додайте його символ до entities-map.txt.");
                 return;
             }
+            player.PlayerInventory.Clear();
 
             logger.Log(LogLevel.Info, "Гравця знайдено, гра починається.");
             bool isRunning = true;
@@ -72,6 +73,8 @@ class Program
             long nextTickAt = tickIntervalMs;
             bool shouldRender = true;
             InterfaceMenu interfaceMenu = new InterfaceMenu(player.PlayerInventory);
+            string lastMessage = "";
+
 
             while (isRunning)
             {
@@ -87,6 +90,7 @@ class Program
                         case ConsoleKey.A: player.MoveLeft(map, logger); break;
                         case ConsoleKey.S: player.MoveDown(map, logger); break;
                         case ConsoleKey.D: player.MoveRight(map, logger); break;
+                        case ConsoleKey.E:interfaceMenu.OpenInventory(player);shouldRender = true; break;
                         case ConsoleKey.Q:
                             logger.Log(LogLevel.Info, "Гравець вийшов з гри.");
                             isRunning = false;
@@ -104,11 +108,21 @@ class Program
                 if (player.PendingPickup != null)
                 {
                     DroppedItem item = player.PendingPickup;
-                    player.PlayerInventory.AddItem(item.ToInventoryItem());
-                    map.GetEntityMap().Remove(item);
+                    if (!player.PlayerInventory.IsFull())
+                    {
+                        player.PlayerInventory.AddItem(item.ToInventoryItem());
+                        map.GetEntityMap().Remove(item);
+                        
+                        logger.Log(LogLevel.Info,
+                            $"Гравець підібрав предмет {item.Name} ({item.Symbol}) у ({item.Position.x}, {item.Position.y}).");
+                        shouldRender = true;
+                    }
+                    else
+                    {
+                        map.SetMessage("Інвентар заповнений! Максимум 12 предметів.");
+                    }
+
                     player.PendingPickup = null;
-                    logger.Log(LogLevel.Info,
-                        $"Гравець підібрав предмет {item.Name} ({item.Symbol}) у ({item.Position.x}, {item.Position.y}).");
                     shouldRender = true;
                 }
 
@@ -162,6 +176,11 @@ class Program
 
                     shouldRender = true;
                 }
+                if (!string.IsNullOrWhiteSpace(map.LastMessage) && map.LastMessage != lastMessage)
+                {
+                    interfaceMenu.AddMessage(map.LastMessage);
+                    lastMessage = map.LastMessage;
+                }
 
                 if (shouldRender)
                 {
@@ -169,18 +188,9 @@ class Program
                     map.Show();
 
                     interfaceMenu.Show_I();
-
                     interfaceMenu.Show_D();
-
                     interfaceMenu.Show_T();
 
-                    Console.SetCursorPosition(0, 29);
-
-                    int messageWidth = Math.Max(1, Console.WindowWidth - 1);
-                    string message = map.LastMessage;
-                    if (message.Length > messageWidth)
-                        message = message.Substring(0, messageWidth);
-                    Console.Write(message.PadRight(messageWidth));
                     shouldRender = false;
                 }
 
@@ -243,3 +253,15 @@ class Program
         }
     }
 }
+
+//карта 1 - найти всі гриби і віддати їх лунтіку і він після цього дасть дозвіл йти далі на північ
+//карта 2 (париж) леді бак і супер кіт говорять що на них напали ведмеді і тому тобі треба їм допомогти їх побити 
+// після цього коли ти вбив усіх ведмедів вони дають тобі золотий гриб
+// карта 3 (вікторина нмт) буде велика хатина в ній буде іпатій потій питати в якому році була проголошена берестейська 
+// унія якщо не вгадав то боришся з ведмедем
+// якщо вгадав то він дає тобі золотий гриб
+//карта 4 буде будинок і в ньому буде белла яка скаже тобі найти едварда(сумерки) бо він пішов кудась в ліс і не вернувся 
+//найдеш-дає тобі золотий гриб
+// карта 5(фінал) ти заходиш в червоний ліс , там страшно і тут ти бачиш ведмедя великого який каже щоб
+// ти назбирав йому грибів і віддав всі 3 золоті гриби 
+// а він випустить тебе з лісу , коли квест виконано ти просинаєшся в дурці і всьо 

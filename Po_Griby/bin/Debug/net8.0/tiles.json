@@ -72,5 +72,26 @@
       "IsWalkable": false,
       "IsNPCWalkable": false
     }
+    ,
+    {
+      "Symbol": "&",
+      "Color": 4,
+      "IsWalkable": false,
+      "IsNPCWalkable": false
+    },
+    {
+      "Symbol": "$",
+      "Color": 1,
+      "IsWalkable": false,
+      "IsNPCWalkable": false
+    },
+    {
+      "Symbol": "=",
+      "Color": 6,
+      "IsWalkable": false,
+      "IsNPCWalkable": false
+    }
+    
+    
   ]
 }

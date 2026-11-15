@@ -1,11 +1,14 @@
+using Po_Griby.Logging;
+using Po_Griby.MapSystem;
+using Po_Griby.UserInterface;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Po_Griby.Logging;
-using Po_Griby.MapSystem;
+
+
 
 namespace Po_Griby.Gameplay
 {
@@ -296,6 +299,8 @@ namespace Po_Griby.Gameplay
         public string TileMapFile { get; }
         public string EntityMapFile { get; }
 
+        Decorations.ForestAnimation2 transitionAnimation = new();
+
         public MapChanger(char symbol, Vector2D position, string? target) : base(symbol, position)
         {
             if (string.IsNullOrWhiteSpace(target))
@@ -307,6 +312,8 @@ namespace Po_Griby.Gameplay
 
         public override string? Interact(Player player)
         {
+            transitionAnimation.DrawForest(ConsoleColor.DarkGreen,ConsoleColor.Green);
+            Console.Clear();
             player.PendingMapChange = this;
             return "Перехід на мапу " + TileMapFile;
         }

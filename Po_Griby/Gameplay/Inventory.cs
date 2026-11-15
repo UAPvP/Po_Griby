@@ -20,6 +20,7 @@ namespace Po_Griby.Gameplay
         public string Description { get; }
         public int HealingValue => Type == ItemType.Heal ? Value : 0;
 
+
         public MushroomItem(string name, ItemType type, int value, string description)
         {
             Name = name;
@@ -65,6 +66,11 @@ namespace Po_Griby.Gameplay
         private readonly List<MushroomItem> items = new();
 
         public IReadOnlyList<MushroomItem> Items => items;
+        public int MaxItems { get; } = 12;
+        public bool IsFull()
+        {
+            return items.Count >= MaxItems;
+        }
 
         public Inventory()
         {
