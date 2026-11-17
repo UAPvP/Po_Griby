@@ -19,6 +19,7 @@ namespace Po_Griby.Gameplay
         public ItemType Type { get; set; } = ItemType.Heal;
         public int Value { get; set; }
         public int HealingValue { get; set; }
+        public bool IsQuestMushroom { get; set; }
     }
 
     public static class PlayerStorage
@@ -60,13 +61,12 @@ namespace Po_Griby.Gameplay
                     Description = item.Description,
                     Type = item.Type,
                     Value = item.Value,
-                    HealingValue = item.HealingValue
+                    HealingValue = item.HealingValue,
+                    IsQuestMushroom = item.IsQuestMushroom
                 }).ToList()
             };
 
             File.WriteAllText(filePath, JsonSerializer.Serialize(data, Options));
         }
-
-
     }
 }

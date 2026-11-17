@@ -34,10 +34,12 @@ class Program
             mainSection.AddOption("📖 ПРАВИЛА", "Керування та правила", () =>
             {
                 Console.Clear();
-                Console.WriteLine("Ну принципі правила тута прості, виживи , а там уже далі по ситуації \n" +
-                    "якщо хочеш то можеш кидатися грибами , бажано битись з ворогами(хто буде ворогом а хто ні там якось в процесі розберешся\nКерування: W — вгору, A — ліворуч, S — вниз, D — праворуч, Q — вихід.\n" +
-                                  "Зіткніться з ворогом, щоб почати бій. У бою можна атакувати, використати гриб або втекти.\n ну напевно удачі любий гравець");
+                Console.WriteLine("Керування: W — вгору, A — ліворуч, S — вниз, D — праворуч, Q — вихід.\n" +
+                                  "Зіткніться з ворогом, щоб почати бій. У бою можна атакувати, використати гриб або втекти.\n" +
+                                  "Також на самому початку знайди nps <В> ");
+                Console.WriteLine();
                 Console.WriteLine("\nНатисніть будь-яку клавішу, щоб повернутися до меню...");
+
                 Console.ReadKey(true);
             });
             mainSection.AddOption("🚪 ВИЙТИ", "Завершити гру", () =>
@@ -59,11 +61,12 @@ class Program
 
             Player? player = FindPlayer(map);
             if (player == null)
-            {
+            { 
                 logger.Log(LogLevel.Warning, "На мапі не знайдено гравця.");
                 Console.WriteLine("На мапі немає гравця. Додайте його символ до entities-map.txt.");
                 return;
             }
+            player.PlayerInventory.Clear();
 
             logger.Log(LogLevel.Info, "Гравця знайдено, гра починається.");
             bool isRunning = true;
@@ -72,6 +75,11 @@ class Program
             var gameClock = System.Diagnostics.Stopwatch.StartNew();
             long nextTickAt = tickIntervalMs;
             bool shouldRender = true;
+            InterfaceMenu interfaceMenu = new InterfaceMenu(player.PlayerInventory);
+            string lastMessage = "";
+
+            
+
 
             while (isRunning)
             {
@@ -87,6 +95,7 @@ class Program
                         case ConsoleKey.A: player.MoveLeft(map, logger); break;
                         case ConsoleKey.S: player.MoveDown(map, logger); break;
                         case ConsoleKey.D: player.MoveRight(map, logger); break;
+                        case ConsoleKey.E:interfaceMenu.OpenInventory(player);shouldRender = true; break;
                         case ConsoleKey.Q:
                             logger.Log(LogLevel.Info, "Гравець вийшов з гри.");
                             isRunning = false;
@@ -104,11 +113,24 @@ class Program
                 if (player.PendingPickup != null)
                 {
                     DroppedItem item = player.PendingPickup;
-                    player.PlayerInventory.AddItem(item.ToInventoryItem());
-                    map.GetEntityMap().Remove(item);
+                    if (!player.PlayerInventory.IsFull())
+                    {
+                        player.PlayerInventory.AddItem(item.ToInventoryItem());
+
+                        
+
+                        map.GetEntityMap().Remove(item);
+                        
+                        logger.Log(LogLevel.Info,
+                            $"Гравець підібрав предмет {item.Name} ({item.Symbol}) у ({item.Position.x}, {item.Position.y}).");
+                        shouldRender = true;
+                    }
+                    else
+                    {
+                        map.SetMessage("Інвентар заповнений! Максимум 12 предметів.");
+                    }
+
                     player.PendingPickup = null;
-                    logger.Log(LogLevel.Info,
-                        $"Гравець підібрав предмет {item.Name} ({item.Symbol}) у ({item.Position.x}, {item.Position.y}).");
                     shouldRender = true;
                 }
 
@@ -142,6 +164,25 @@ class Program
                     }
                     shouldRender = true;
                 }
+                if (player.PendingAnimation)
+                {
+                    player.PendingAnimation = false;
+                    PlayerStorage.Save("player.json", player);
+                    isRunning = false;
+                    Console.Clear();
+
+                    SnowEndingAnimation.Play();
+
+                    Console.Clear();
+
+                    End_game_plot ending = new End_game_plot();
+                    ending.plot();
+
+                    Console.ResetColor();
+                    Console.CursorVisible = true;
+
+                    break;
+                }
 
                 bool tickElapsed = gameClock.ElapsedMilliseconds >= nextTickAt;
                 if (tickElapsed)
@@ -162,19 +203,21 @@ class Program
 
                     shouldRender = true;
                 }
+                if (!string.IsNullOrWhiteSpace(map.LastMessage) && map.LastMessage != lastMessage)
+                {
+                    interfaceMenu.AddMessage(map.LastMessage);
+                    lastMessage = map.LastMessage;
+                }
 
                 if (shouldRender)
                 {
                     Console.SetCursorPosition(0, 0);
                     map.Show();
-                    Console.WriteLine();
-                    Console.WriteLine("Керування: W — вгору, A — ліворуч, S — вниз, D — праворуч, Q — вихід.");
 
-                    int messageWidth = Math.Max(1, Console.WindowWidth - 1);
-                    string message = map.LastMessage;
-                    if (message.Length > messageWidth)
-                        message = message.Substring(0, messageWidth);
-                    Console.Write(message.PadRight(messageWidth));
+                    interfaceMenu.Show_I();
+                    interfaceMenu.Show_D();
+                    interfaceMenu.Show_T(player);
+
                     shouldRender = false;
                 }
 

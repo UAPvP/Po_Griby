@@ -11,7 +11,28 @@
       "Symbol": "E",
       "Color": "Red",
       "Type": "BasicNPC",
-      "Dialogue": "Вітаю! Ласкаво просимо.",
+      "Dialogue": "Вітаю! Ласкаво просимо.\nТвоє завдання виконати квести які діють ЖОВТІ персонажі,\nуникай ворогів!",
+      "Target": null
+    },
+    {
+      "Symbol": "H",
+      "Color": "Red",
+      "Type": "BasicNPC",
+      "Dialogue": "Твоє завдання виконати квести які діють CИНІ персонажі,\nуникай ворогів, вони стали сильніші!",
+      "Target": null
+    },
+    {
+      "Symbol": "Z",
+      "Color": "Red",
+      "Type": "BasicNPC",
+      "Dialogue": "Твоє завдання виконати квести які діють БІЛІ персонажі,\nуникай ворогів, вони стали сильніші!",
+      "Target": null
+    },
+    {
+      "Symbol": "Q",
+      "Color": "Red",
+      "Type": "BasicNPC",
+      "Dialogue": "Твоє завдання виконати квести які діють РОЖЕВІ персонажі,\nуникай ворогів, вони стали сильніші!",
       "Target": null
     },
     {
@@ -55,6 +76,188 @@
       "Type": "BearMiniBoss",
       "Dialogue": null,
       "Target": null
+    },
+    {
+      "Symbol": "g",
+      "Color": "Green",
+      "Type": "Mushroom",
+      "HealingValue": 10
+    },
+    {
+      "Symbol": "1",
+      "Color": "White",
+      "Type": "MapChanger",
+      "Dialogue": "Зміна мапи",
+      "Target": "map2.txt",
+      "RequiredQuestIds": [
+        "collect_3_mushrooms"
+        ]
+    },
+    {
+      "Symbol": "2",
+      "Color": "White",
+      "Type": "MapChanger",
+      "Dialogue": "Зміна мапи",
+      "Target": "map3.txt",
+      "RequiredQuestIds": [
+        "collect_5_mushrooms"]
+    },
+    {
+      "Symbol": "3",
+      "Color": "White",
+      "Type": "MapChanger",
+      "Dialogue": "Зміна мапи",
+      "Target": "map4.txt",
+      "RequiredQuestIds": [
+        "purple_forest_3","collect_7_mushrooms"]
+    },
+    {
+      "Symbol": "4",
+      "Color": "Yellow",
+      "Type": "AnimationTrigger",
+      "RequiredQuestIds": [
+        "frozen_traveler",
+        "winter_witch"
+      ]
+    },
+    {
+      "Symbol": "d",
+      "Color": "White",
+      "Type": "BasicNPC",
+      "Dialogue": "Грибник:\nО, грибничкуємо? Тільки мухомори не збирай, я минулого разу після них 3 дня з деревом розмовляв",
+      "Target": null
+    },
+    {
+      "Symbol": "Y",
+      "Color": "White",
+      "Type": "BasicNPC",
+      "Dialogue": "Незнайомець:\nЯ вже четверту годину не можу найти вихід, а він тут точно є?...",
+      "Target": null
+    },
+    {
+      "Symbol": "D",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Незнайомий дідусь:\nТи теж по гриби прийшов?Хм... а я думав що всі вже пішли",
+      "Target": null
+    },
+    {
+      "Symbol": "b",
+      "Color": "DarkBlue",
+      "Type": "QuestNPC",
+      "Dialogue": "Незнайома бабуся:\nМені треба всього 5 грибочки. Тільки не ті червоні, від них сни потім цікаві",
+      "QuestId": "collect_5_mushrooms",
+      "QuestDescription": "Знайди та принеси мені 5 грибочки.",
+      "QuestAmount": 5
+    },
+    {
+      "Symbol": "h",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Фермер:\nАкуратніше, куда на мій город прешся, дурень безсовісний",
+      "Target": null
+    },
+    {
+      "Symbol": "c",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Кісяя:\nMяу мяу",
+      "Target": null
+    },
+    {
+      "Symbol": "K",
+      "Color": "DarkYellow",
+      "Type": "QuestNPC",
+      "Dialogue": "Схились перед Великим грибним королем!",
+      "QuestId": "collect_3_mushrooms",
+      "QuestDescription": "Знайди та принеси мені 3 грибів.",
+      "QuestAmount": 3
+    },
+    {
+      "Symbol": "l",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Гусиниця:\nЯк думаєш чи існує місце де гусиниці керують світом?...",
+      "Target": null
+    },
+    {
+      "Symbol": "U",
+      "Color": "White",
+      "Type": "BasicNPC",
+      "Dialogue": "Чаклун:\nНічого собі, ще один дурень зайшов у цей ліс, хочег чогось випити? Води, зілья чи чогось міцнішого?",
+      "QuestId": "collect_7_mushrooms",
+      "QuestDescription": "Знайди та принеси мені 7 грибів для того щоб зварити зілля",
+      "QuestAmount": 7
     }
+    ,
+    {
+      "Symbol": "T",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Незнайомець:\nЯ просто хотів знайти білий гриб. ЧОМУ ВОНИ ВСІ ДИВЛЯТЬСЯ НА МЕНЕ??",
+      "Target": null
+    }
+    ,
+    {
+      "Symbol": "S",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Привіт, ти не бачив мого носа? Я його десь загубив... хоча він здається на місці...",
+      "Target": null
+    },
+    {
+      "Symbol": "F",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Лісник:\nДивно, сніг йде вже 3тій день.. а от сліди твої тут здається були ще до того як ти прийшов.",
+      "Target": null
+    }
+    ,
+    {
+      "Symbol": "O",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Cова:\nГу Гу ,Не довіряй тому хто пам'ятає тебе краще ніж ти сам",
+      "Target": null
+    }
+    ,
+    {
+      "Symbol": "f",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Хочеш знайти вихід? тоді перестань шукати дорогу ",
+      "Target": null
+    },
+    {
+      "Symbol": "R",
+      "Color": "White",
+      "Type": "QuestNPC",
+      "Dialogue": "Хранитель фіолетового лісу:\nТсс... Ти теж бачиш, як вони світяться? Мені потрібні 3 грибів. Тільки не питай, навіщо...",
+      "QuestId": "purple_forest_3",
+      "QuestDescription": "Збери та принеси 3 грибів Хранителю.",
+      "QuestAmount": 3
+    },
+    {
+      "Symbol": "C",
+      "Color": "Magenta",
+      "Type": "QuestNPC",
+      "Dialogue": "Бр-р-р... Я шукаю крижаний гриб! Кажуть, він росте лише там, де навіть сніг боїться танути. Принеси мені 4 гриби, і я поділюся своєю знахідкою.",
+      "QuestId": "frozen_traveler",
+      "QuestDescription": "Принеси мандрівнику 4 гриби.",
+      "QuestAmount": 4
+    }
+    ,
+    {
+      "Symbol": "V",
+      "Color": "Magenta",
+      "Type": "QuestNPC",
+      "Dialogue": "Ох... Ще один мандрівник, який заблукав у моїх володіннях. Хочеш пройти далі? Тоді доведи, що не боїшся морозу. Принеси мені 6 грибів!",
+      "QuestId": "winter_witch",
+      "QuestDescription": "Знайди та принеси Сніговій відьмі 6 грибів.",
+      "QuestAmount": 6
+    }
+
+
+    
   ]
 }
