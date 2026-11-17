@@ -19,14 +19,16 @@ namespace Po_Griby.Gameplay
         public int Value { get; }
         public string Description { get; }
         public int HealingValue => Type == ItemType.Heal ? Value : 0;
+        public bool IsQuestMushroom { get; }
 
 
-        public MushroomItem(string name, ItemType type, int value, string description)
+        public MushroomItem(string name, ItemType type, int value, string description, bool isQuestMushroom = false)
         {
             Name = name;
             Type = type;
             Value = value;
             Description = description;
+            IsQuestMushroom = isQuestMushroom;
         }
 
         public void Use(Player player)
@@ -95,6 +97,43 @@ namespace Po_Griby.Gameplay
             {
                 items.RemoveAt(index);
             }
+        }
+
+        public int CountItems()
+        {
+            return items.Count;
+        }
+
+        public bool RemoveItems(int amount)
+        {
+            if (amount < 1 || items.Count < amount)
+                return false;
+
+            for (int i = 0; i < amount; i++)
+            {
+                items.RemoveAt(0);
+            }
+
+            return true;
+        }
+
+        public bool RemoveQuestItems(int amount)
+        {
+            int count = Items.Count(item => item.IsQuestMushroom);
+
+            if (count < amount)
+                return false;
+
+            for (int i = Items.Count - 1; i >= 0 && amount > 0; i--)
+            {
+                if (Items[i].IsQuestMushroom)
+                {
+                    Items.RemoveAt(i);
+                    amount--;
+                }
+            }
+
+            return true;
         }
 
         public bool IsEmpty()

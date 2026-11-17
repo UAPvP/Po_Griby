@@ -232,6 +232,9 @@ namespace Po_Griby.Gameplay
         public MapChanger? PendingMapChange { get; set; }
         public DroppedItem? PendingPickup { get; set; }
 
+        public Quests? CurrentQuest { get; set; }
+        public List<string> CompletedQuests { get; } = new();
+
         public Inventory PlayerInventory { get; } = new();
         public Enemy? PendingBattle { get; set; }
         public Player(char symbol, Vector2D position) : base(symbol, position)
@@ -252,7 +255,7 @@ namespace Po_Griby.Gameplay
                 int value = item.Value != 0 || item.HealingValue == 0
                     ? item.Value
                     : item.HealingValue;
-                PlayerInventory.AddItem(new MushroomItem(item.Name, item.Type, value, item.Description));
+                PlayerInventory.AddItem(new MushroomItem(item.Name, item.Type, value, item.Description, item.IsQuestMushroom));
             }
         }
 
@@ -275,7 +278,13 @@ namespace Po_Griby.Gameplay
             DefenseShield = other.DefenseShield;
             PlayerInventory.Clear();
             foreach (MushroomItem item in other.PlayerInventory.Items)
-                PlayerInventory.AddItem(new MushroomItem(item.Name, item.Type, item.Value, item.Description));
+                PlayerInventory.AddItem(new MushroomItem(item.Name, item.Type, item.Value, item.Description, item.IsQuestMushroom));
+            CurrentQuest = other.CurrentQuest?.Copy();
+
+            CompletedQuests.Clear();
+
+            foreach (string questId in other.CompletedQuests)
+                CompletedQuests.Add(questId);
         }
     }
 
@@ -408,11 +417,12 @@ namespace Po_Griby.Gameplay
     public class Mushroom : DroppedItem
     {
         public int HealingValue { get; }
+        public bool IsQuestMushroom { get; set; }
 
-        public Mushroom(char symbol, Vector2D position, int healingValue)
-            : base(symbol, position, "Гриб", "Звичайний гриб")
+        public Mushroom(char symbol, Vector2D position, int healingValue, bool isQuestMushroom = true) : base(symbol, position, "Гриб", "Звичайний гриб")
         {
             HealingValue = healingValue;
+            IsQuestMushroom = isQuestMushroom;
         }
 
         public override void Use(Player player)
@@ -423,7 +433,7 @@ namespace Po_Griby.Gameplay
 
         public override MushroomItem ToInventoryItem()
         {
-            return new MushroomItem(Name, ItemType.Heal, HealingValue, Description);
+            return new MushroomItem(Name, ItemType.Heal, HealingValue, Description, IsQuestMushroom);
         }
     }
 

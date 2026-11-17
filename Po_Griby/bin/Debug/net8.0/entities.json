@@ -128,9 +128,11 @@
     {
       "Symbol": "K",
       "Color": "DarkYellow",
-      "Type": "BasicNPC",
-      "Dialogue": "Схились перед Великим грибним королем, ти тут ніхто, хочеш вижити- знайди 5 грибів  ",
-      "Target": null
+      "Type": "QuestNPC",
+      "Dialogue": "Схились перед Великим грибним королем!",
+      "QuestId": "collect_5_mushrooms",
+      "QuestDescription": "Знайди та принеси мені 5 грибів.",
+      "QuestAmount": 5
     },
     {
       "Symbol": "l",

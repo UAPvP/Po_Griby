@@ -30,5 +30,110 @@
       "dialogue": "Зміна мапи",
       "Target": "map4.txt"
     }
+    ,
+    {
+      "Symbol": "d",
+      "Color": "White",
+      "Type": "BasicNPC",
+      "Dialogue": "О, грибничкуємо? Тільки мухомори не збирай, я минулого разу після них 3 дня з деревом розмовляв",
+      "Target": null
+    },
+    {
+      "Symbol": "Y",
+      "Color": "White",
+      "Type": "BasicNPC",
+      "Dialogue": "Я вже четверту годину не можу найти вихід, а він тут точно є?...",
+      "Target": null
+    },
+    {
+      "Symbol": "D",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Ти теж по гриби прийшов?Хм... а я думав що всі вже пішли",
+      "Target": null
+    },
+    {
+      "Symbol": "b",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Мені треба всього 3 грибочки. Тільки не ті червоні, від них сни потім цікаві",
+      "Target": null
+    },
+    {
+      "Symbol": "h",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Акуратніше, куда на мій город прешся, дурень безсовісний",
+      "Target": null
+    },
+    {
+      "Symbol": "с",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Mяу мяу",
+      "Target": null
+    },
+    {
+      "Symbol": "K",
+      "Color": "DarkYellow",
+      "Type": "QuestNPC",
+      "Dialogue": "Схились перед Великим грибним королем!",
+      "QuestId": "collect_5_mushrooms",
+      "QuestDescription": "Знайди та принеси мені 5 грибів.",
+      "QuestAmount": 5
+    },
+    {
+      "Symbol": "l",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Як думаєш чи існує місце де гусиниці керують світом?...",
+      "Target": null
+    },
+    {
+      "Symbol": "A",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Нічого собі, ще один дурень зайшов у цей ліс, хочег чогось випити? Води, зілья чи чогось міцнішого?",
+      "Target": null
+    }
+    ,
+    {
+      "Symbol": "T",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Я просто хотів знайти білий гриб. ЧОМУ ВОНИ ВСІ ДИВЛЯТЬСЯ НА МЕНЕ??",
+      "Target": null
+    }
+    ,
+    {
+      "Symbol": "S",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Привіт, ти не бачив мого носа? Я його десь загубив... хоча він здається на місці...",
+      "Target": null
+    },
+    {
+      "Symbol": "F",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Дивно, сніг йде вже 3тій день.. а от сліди твої тут здається були ще до того як ти прийшов.",
+      "Target": null
+    }
+    ,
+    {
+      "Symbol": "O",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Не довіряй тому хто пам'ятає тебе краще ніж ти сам",
+      "Target": null
+    }
+    ,
+    {
+      "Symbol": "f",
+      "Color": "DarkYellow",
+      "Type": "BasicNPC",
+      "Dialogue": "Хочеш знайти вихід? тоді перестань шукати дорогу ",
+      "Target": null
+    }
   ]
 }

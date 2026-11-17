@@ -15,10 +15,29 @@ namespace Po_Griby.UserInterface
 
         public IReadOnlyList<MushroomItem> Items => inventory.Items;
 
-        public void Show_T()
+        public void Show_T(Player player)
         {
-            Console.SetCursorPosition(70, 23);
-            Console.WriteLine("====== 📖 КВЕСТИ 📖 ======");
+            Console.SetCursorPosition(70, 10);
+            Console.WriteLine("====== 📜 ЗАВДАННЯ 📜 ======");
+
+            Console.SetCursorPosition(70, 11);
+
+            if (player.CurrentQuest == null)
+            {
+                Console.WriteLine("Немає активних завдань.");
+            }
+            else
+            {
+                Console.WriteLine(player.CurrentQuest.Description);
+
+                Console.SetCursorPosition(70, 12);
+
+                int progress = player.CurrentQuest.GetProgress(player.PlayerInventory);
+
+                Console.WriteLine(
+                    "Прогрес: " + progress + "/" +
+                    player.CurrentQuest.RequiredAmount);
+            }
         }
 
         private List<string> messages = new List<string>();
@@ -154,9 +173,24 @@ namespace Po_Griby.UserInterface
                         if (!inventory.IsEmpty())
                         {
                             MushroomItem item = inventory.Items[selectedIndex];
-
                             Console.Clear();
                             item.Use(player);
+
+                            if (player.CurrentQuest != null)
+                            {
+                                Console.WriteLine("Прогрес квесту: " + player.CurrentQuest.Progress);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Немає активного квесту");
+                            }
+
+                            if (item.IsQuestMushroom && player.CurrentQuest != null)
+                            {
+                                player.CurrentQuest.RemoveProgress();
+                                Console.WriteLine("Прогрес квесту: " + player.CurrentQuest.Progress);
+                            }
+
                             inventory.RemoveItem(selectedIndex);
 
                             if (selectedIndex >= inventory.Items.Count)
