@@ -1,8 +1,33 @@
 {
-  "Health": 108,
+  "Health": 118,
   "AttackSpeed": 3,
   "AttackDamage": 5,
   "DefenseSpeed": 2,
   "DefenseShield": 0,
-  "Inventory": []
+  "Inventory": [
+    {
+      "Name": "\u0417\u043E\u043B\u043E\u0442\u0438\u0439 \u0433\u0440\u0438\u0431",
+      "Description": "\u0420\u0456\u0434\u043A\u0456\u0441\u043D\u0438\u0439 \u0437\u043E\u043B\u043E\u0442\u0438\u0439 \u0433\u0440\u0438\u0431.",
+      "Type": 0,
+      "Value": 50,
+      "HealingValue": 50,
+      "IsQuestMushroom": false
+    },
+    {
+      "Name": "\u0417\u043E\u043B\u043E\u0442\u0438\u0439 \u0433\u0440\u0438\u0431",
+      "Description": "\u0420\u0456\u0434\u043A\u0456\u0441\u043D\u0438\u0439 \u0437\u043E\u043B\u043E\u0442\u0438\u0439 \u0433\u0440\u0438\u0431.",
+      "Type": 0,
+      "Value": 50,
+      "HealingValue": 50,
+      "IsQuestMushroom": false
+    },
+    {
+      "Name": "\u0417\u043E\u043B\u043E\u0442\u0438\u0439 \u0433\u0440\u0438\u0431",
+      "Description": "\u0420\u0456\u0434\u043A\u0456\u0441\u043D\u0438\u0439 \u0437\u043E\u043B\u043E\u0442\u0438\u0439 \u0433\u0440\u0438\u0431.",
+      "Type": 0,
+      "Value": 50,
+      "HealingValue": 50,
+      "IsQuestMushroom": false
+    }
+  ]
 }

@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Po_Griby.Gameplay.Po_Griby.Gameplay;
 
 
 
@@ -230,6 +229,7 @@ namespace Po_Griby.Gameplay
         public int AttackDamage { get; private set; }
         public int DefenseSpeed { get; private set; }
         public int DefenseShield { get; private set; }
+        public bool PendingAnimation { get; set; }
 
         public MapChanger? PendingMapChange { get; set; }
         public DroppedItem? PendingPickup { get; set; }
@@ -309,20 +309,29 @@ namespace Po_Griby.Gameplay
     {
         public string TileMapFile { get; }
         public string EntityMapFile { get; }
+        public List<string> RequiredQuestIds { get; }
 
         Decorations.ForestAnimation2 transitionAnimation = new();
 
-        public MapChanger(char symbol, Vector2D position, string? target) : base(symbol, position)
+        public MapChanger(char symbol, Vector2D position, string? target, List<string>? requiredQuestIds = null) : base(symbol, position)
         {
             if (string.IsNullOrWhiteSpace(target))
                 throw new FormatException($"Для переходу з мапи '{symbol}' не вказано цільову мапу.");
 
             TileMapFile = target.Trim();
             EntityMapFile = "entities-" + TileMapFile;
+            RequiredQuestIds = requiredQuestIds ?? new List<string>();
         }
 
         public override string? Interact(Player player)
         {
+            foreach (string questId in RequiredQuestIds)
+            {
+                if (!player.CompletedQuests.Contains(questId))
+                {
+                    return "Ти ще не виконав усі квести! Спочатку заверши свої завдання.";
+                }
+            }
             transitionAnimation.DrawForest(ConsoleColor.DarkGreen,ConsoleColor.Green);
             Console.Clear();
             player.PendingMapChange = this;
@@ -539,6 +548,30 @@ namespace Po_Griby.Gameplay
             Console.ResetColor();
             player.TakeDamage(AttackDamage);
             Console.WriteLine($"Ви отримали {AttackDamage} одиниць сильної шкоди!");
+        }
+    }
+    internal class AnimationTrigger : Entity
+    {
+        public List<string> RequiredQuestIds { get; }
+
+        public AnimationTrigger(char symbol, Vector2D position, List<string>? requiredQuestIds = null)
+            : base(symbol, position)
+        {
+            RequiredQuestIds = requiredQuestIds ?? new List<string>();
+        }
+
+        public override string? Interact(Player player)
+        {
+            foreach (string questId in RequiredQuestIds)
+            {
+                if (!player.CompletedQuests.Contains(questId))
+                {
+                    return "Ти ще не виконав усі квести!";
+                }
+            }
+
+            player.PendingAnimation = true;
+            return null;
         }
     }
 

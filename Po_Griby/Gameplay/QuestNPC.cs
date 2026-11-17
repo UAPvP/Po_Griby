@@ -1,4 +1,4 @@
-﻿using Po_Griby.Gameplay.Po_Griby.Gameplay;
+﻿using Po_Griby.Gameplay;
 using Po_Griby.MapSystem;
 using System;
 using System.Collections.Generic;
@@ -54,7 +54,7 @@ namespace Po_Griby.Gameplay
                 player.CurrentQuest = null;
 
                 player.PlayerInventory.AddItem(
-                    new MushroomItem("Золотий гриб",ItemType.Heal,50,"Рідкісний золотий гриб. Відновлює 50 HP."));
+                    new MushroomItem("Золотий гриб",ItemType.Heal,50,"Рідкісний золотий гриб."));
 
                 return "Квест виконано! Ти отримуєш Золотий гриб!";
             }

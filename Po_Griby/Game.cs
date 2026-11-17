@@ -35,8 +35,11 @@ class Program
             {
                 Console.Clear();
                 Console.WriteLine("Керування: W — вгору, A — ліворуч, S — вниз, D — праворуч, Q — вихід.\n" +
-                                  "Зіткніться з ворогом, щоб почати бій. У бою можна атакувати, використати гриб або втекти.");
+                                  "Зіткніться з ворогом, щоб почати бій. У бою можна атакувати, використати гриб або втекти.\n" +
+                                  "Також на самому початку знайди nps <В> ");
+                Console.WriteLine();
                 Console.WriteLine("\nНатисніть будь-яку клавішу, щоб повернутися до меню...");
+
                 Console.ReadKey(true);
             });
             mainSection.AddOption("🚪 ВИЙТИ", "Завершити гру", () =>
@@ -74,6 +77,8 @@ class Program
             bool shouldRender = true;
             InterfaceMenu interfaceMenu = new InterfaceMenu(player.PlayerInventory);
             string lastMessage = "";
+
+            
 
 
             while (isRunning)
@@ -158,6 +163,25 @@ class Program
                         break;
                     }
                     shouldRender = true;
+                }
+                if (player.PendingAnimation)
+                {
+                    player.PendingAnimation = false;
+                    PlayerStorage.Save("player.json", player);
+                    isRunning = false;
+                    Console.Clear();
+
+                    SnowEndingAnimation.Play();
+
+                    Console.Clear();
+
+                    End_game_plot ending = new End_game_plot();
+                    ending.plot();
+
+                    Console.ResetColor();
+                    Console.CursorVisible = true;
+
+                    break;
                 }
 
                 bool tickElapsed = gameClock.ElapsedMilliseconds >= nextTickAt;

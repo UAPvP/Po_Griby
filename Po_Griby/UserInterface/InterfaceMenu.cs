@@ -20,6 +20,13 @@ namespace Po_Griby.UserInterface
             Console.SetCursorPosition(70, 10);
             Console.WriteLine("====== 📜 ЗАВДАННЯ 📜 ======");
 
+            for (int i = 10; i <= 12; i++)
+            {
+                Console.SetCursorPosition(70, i);
+                Console.Write(new string(' ', Console.WindowWidth - 72));
+            }
+            
+
             Console.SetCursorPosition(70, 11);
 
             if (player.CurrentQuest == null)
@@ -56,6 +63,11 @@ namespace Po_Griby.UserInterface
 
         public void Show_D()
         {
+            int x = 70;
+            int startY = 14;
+            int maxLines = 8;
+            
+
             Console.SetCursorPosition(70, 13);
             Console.WriteLine("====== 👤 ДІАЛОГИ 👤 ======");
             int width = Console.WindowWidth - 71;
@@ -65,17 +77,48 @@ namespace Po_Griby.UserInterface
                 Console.SetCursorPosition(70, i);
                 Console.Write(new string(' ', width));
             }
-
-            int y = 14;
+            List<string> lines = new List<string>();
+            
 
             foreach (string message in messages)
             {
-                Console.SetCursorPosition(70, y);
-                Console.Write(message);
-                y++;
+                string[] paragraphs = message.Split('\n');
 
-                if (y >= 22)
-                    break;
+                foreach (string paragraph in paragraphs)
+                {
+                    string[] words = paragraph.Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries);
+
+                    string line = "";
+
+                    foreach (string word in words)
+                    {
+                        if (line.Length + word.Length + 1 > width)
+                        {
+                            if (line.Length > 0)
+                            {
+                                lines.Add(line);
+                                line = "";
+                            }
+                        }
+
+                        if (line.Length > 0)
+                            line += " ";
+
+                        line += word;
+                    }
+
+                    if (line.Length > 0)
+                        lines.Add(line);
+                }
+            }
+            int firstLine = Math.Max(0, lines.Count - maxLines);
+            int y = startY;
+
+            for (int i = firstLine; i < lines.Count; i++)
+            {
+                Console.SetCursorPosition(x, y);
+                Console.Write(lines[i]);
+                y++;
             }
         }
 

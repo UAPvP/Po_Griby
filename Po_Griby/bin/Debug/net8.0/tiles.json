@@ -88,8 +88,8 @@
     {
       "Symbol": "=",
       "Color": 6,
-      "IsWalkable": false,
-      "IsNPCWalkable": false
+      "IsWalkable": true,
+      "IsNPCWalkable": true
     }
     
     

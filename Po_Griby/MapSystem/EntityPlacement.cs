@@ -22,6 +22,7 @@ namespace Po_Griby.MapSystem
         public string? QuestId { get; set; }
         public string? QuestDescription { get; set; }
         public int QuestAmount { get; set; } = 1;
+        public List<string> RequiredQuestIds { get; set; } = new();
     }
 
     public class EntityPlacement
@@ -44,6 +45,8 @@ namespace Po_Griby.MapSystem
         public string? QuestDescription { get; }
         public int QuestAmount { get; }
 
+        public List<string> RequiredQuestIds { get; }
+
         public EntityPlacement(
             char symbol,
             ConsoleColor color,
@@ -54,7 +57,8 @@ namespace Po_Griby.MapSystem
             MovePattern movePattern = MovePattern.Stationary,
             string? questId = null,
             string? questDescription = null,
-            int questAmount = 1)
+            int questAmount = 1,
+            List<string>? requiredQuestIds = null)
         {
             Symbol = symbol;
             Color = color;
@@ -66,7 +70,7 @@ namespace Po_Griby.MapSystem
             QuestId = questId;
             QuestDescription = questDescription;
             QuestAmount = questAmount;
-
+            RequiredQuestIds = requiredQuestIds ?? new List<string>();
         }
 
         public Entity CreateEntity(Vector2D position)
@@ -76,13 +80,14 @@ namespace Po_Griby.MapSystem
                 "Player" => new Player(Symbol, position),
                 "BasicNPC" => new BasicNPC(Symbol, position, Dialogue ?? string.Empty),
                 "Mushroom" => new Mushroom(Symbol, position, HealingValue),
-                "MapChanger" => new MapChanger(Symbol, position, Target),
+                "MapChanger" => new MapChanger(Symbol, position, Target, RequiredQuestIds),
                 "FalseBoletus" => new FalseBoletus(Symbol, position),
                 "PuffballMushroom" => new PuffballMushroom(Symbol, position),
                 "WildBoar" => new WildBoar(Symbol, position),
                 "WolfPack" => new WolfPack(Symbol, position),
                 "BearMiniBoss" => new BearMiniBoss(Symbol, position),
                 "QuestNPC" => new QuestNPC(Symbol, position, Dialogue ?? string.Empty, QuestId ?? "", QuestDescription ?? "", QuestAmount),
+                "AnimationTrigger" => new AnimationTrigger(Symbol, position, RequiredQuestIds),
                 _ => throw new InvalidOperationException($"Невідомий тип сутності: {ClassName}")
                 
             };
@@ -186,7 +191,8 @@ namespace Po_Griby.MapSystem
                     definition.MovePattern,
                     definition.QuestId,
                     definition.QuestDescription,
-                    definition.QuestAmount);
+                    definition.QuestAmount,
+                    definition.RequiredQuestIds);
                 if (!definitions.TryAdd(definition.Symbol, placement))
                     throw new InvalidDataException($"Символ сутності '{definition.Symbol}' указано кілька разів.");
             }

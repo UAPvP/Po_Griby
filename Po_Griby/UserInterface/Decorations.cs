@@ -99,7 +99,7 @@ namespace Po_Griby.UserInterface
                 mirrorTree.PrintMirrorAt(19, 27, "## #   ##  # #  ### ##### ###### ##");
 
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                
+
 
                 mirrorTree.PrintMirrorAt(1, 27, "#");
                 mirrorTree.PrintMirrorAt(1, 28, "#");
@@ -119,9 +119,9 @@ namespace Po_Griby.UserInterface
                 Console.ResetColor();
             }
 
-            
 
-                private void PrintAt(int x, int y, string text)
+
+            private void PrintAt(int x, int y, string text)
             {
                 Console.SetCursorPosition(x, y);
                 Console.Write(text);
@@ -147,8 +147,8 @@ namespace Po_Griby.UserInterface
                 PrintTree(25, 7, 12, TreeColor1);
                 PrintTree(36, 5, 12, TreeColor2);
                 PrintTree(44, 5, 10, TreeColor1);
-                
-                
+
+
 
                 PrintTree(102, 14, 17, TreeColor2);
                 PrintTree(90, 11, 14, TreeColor1);
@@ -184,7 +184,7 @@ namespace Po_Griby.UserInterface
                     PrintAtSafe(right, y, "\\");
                 }
 
-                
+
 
 
                 AnimateSteps();
@@ -260,26 +260,26 @@ namespace Po_Griby.UserInterface
             {
                 Console.SetCursorPosition(x, y);
                 Console.WriteLine("##");
-                Console.SetCursorPosition(x, y+1);
+                Console.SetCursorPosition(x, y + 1);
                 Console.WriteLine("###");
                 Console.SetCursorPosition(x, y + 2);
                 Console.WriteLine("###");
                 Console.SetCursorPosition(x, y + 3);
                 Console.WriteLine("##");
-                
+
             }
 
             public void Step_l(int x, int y)
             {
                 Console.SetCursorPosition(x, y);
                 Console.WriteLine("##");
-                Console.SetCursorPosition(x-1, y + 1);
+                Console.SetCursorPosition(x - 1, y + 1);
                 Console.WriteLine("###");
-                Console.SetCursorPosition(x-1, y + 2);
+                Console.SetCursorPosition(x - 1, y + 2);
                 Console.WriteLine("###");
                 Console.SetCursorPosition(x, y + 3);
                 Console.WriteLine("##");
-                
+
             }
         }
 
@@ -321,7 +321,7 @@ namespace Po_Griby.UserInterface
         }
     }
 
-    public class  game_plot
+    public class game_plot
     {
         private bool skip = false;
         Decorations.ForestAnimation forest = new();
@@ -335,7 +335,7 @@ namespace Po_Griby.UserInterface
 
             while (!skip)
             {
-                
+
 
                 if (Console.KeyAvailable)
                 {
@@ -351,7 +351,7 @@ namespace Po_Griby.UserInterface
                     break;
 
                 Console.Clear();
-                
+
                 cursor.tp_Cursor(10, 7);
                 delay_text.PrintText("Щоб пропустити заставку (що не рекомендується для повного розуміння сюжету) натисни - S -             ");
 
@@ -367,7 +367,7 @@ namespace Po_Griby.UserInterface
                 cursor.tp_Cursor(48, 13);
                 delay_text.PrintText("Новицький Вячеслав");
                 cursor.tp_Cursor(48, 15);
-                delay_text.PrintText("Лотоцька Марія"); 
+                delay_text.PrintText("Лотоцька Марія");
                 cursor.tp_Cursor(48, 17);
                 delay_text.PrintText("Рубцов Андрій");
                 cursor.tp_Cursor(48, 19);
@@ -475,7 +475,7 @@ namespace Po_Griby.UserInterface
                 forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
                 cursor.tp_Cursor(48, 7);
                 Console.ForegroundColor = ConsoleColor.Red;
-                
+
                 delay_text.PrintText_s("Через декілька годин     ");
 
                 break;
@@ -486,4 +486,168 @@ namespace Po_Griby.UserInterface
 
     }
 
+    public class SnowEndingAnimation
+    {
+        public static void Play()
+        {
+            Console.Clear();
+
+            int width = Console.WindowWidth;
+            int height = Console.WindowHeight;
+
+            char[,] snow = new char[height, width];
+
+            int filled = 0;
+            int total = width * height;
+
+            Random random = new Random();
+
+            Console.CursorVisible = false;
+            Console.ForegroundColor = ConsoleColor.White;
+
+            while (filled < total * 0.9)
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    int x = random.Next(width);
+                    int y = random.Next(height);
+
+                    if (snow[y, x] == '\0')
+                    {
+                        snow[y, x] = '*';
+                        filled++;
+                    }
+                }
+
+                Console.SetCursorPosition(0, 0);
+
+                for (int row = 0; row < height; row++)
+                {
+                    for (int col = 0; col < width; col++)
+                    {
+                        Console.Write(snow[row, col] == '\0' ? ' ' : snow[row, col]);
+                    }
+                }
+
+                Thread.Sleep(1);
+            }
+
+            Console.Clear();
+        }
+    }
+
+    public class End_game_plot
+    {
+
+        Decorations.ForestAnimation forest = new();
+        Decorations.ForestAnimation2 forest2 = new();
+
+        public void plot()
+        {
+            Cursore cursor = new();
+
+            Console.Clear();
+            forest.DrawForest(ConsoleColor.DarkCyan, ConsoleColor.White);
+
+            cursor.tp_Cursor(52, 7);
+            delay_text.PrintText("THE END...?");
+
+            cursor.tp_Cursor(34, 9);
+            delay_text.PrintText("Ти нарешті виконав усі завдання.");
+            cursor.tp_Cursor(34, 10);
+            delay_text.PrintText("Усі персонажі залишилися позаду. Ліс затих. Сніг повільно вкриває землю.");
+            cursor.tp_Cursor(34, 11);
+            delay_text.PrintText("Ти зробив останній крок і раптом почув знайомий голос.");
+
+            forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
+            cursor.tp_Cursor(35, 12);
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+
+            delay_text.PrintText_s("«Ти знову тут?»");
+            forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
+            Console.ForegroundColor = ConsoleColor.White;
+            cursor.tp_Cursor(34, 13);
+            delay_text.PrintText("...");
+
+            forest.DrawForest(ConsoleColor.DarkRed, ConsoleColor.Red);
+            cursor.tp_Cursor(35, 14);
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+
+            delay_text.PrintText_s("«Скільки разів тобі пояснювати, що цього лісу не існує?»");
+            forest.DrawForest(ConsoleColor.DarkGreen, ConsoleColor.Green);
+            Console.ForegroundColor = ConsoleColor.White;
+            cursor.tp_Cursor(34, 15);
+            delay_text.PrintText("...");
+
+            Console.Clear();
+      
+            cursor.tp_Cursor(34, 9);
+            delay_text.PrintText("Ти намагаєшся озирнутися, але все навколо починає зникати.");
+            cursor.tp_Cursor(34, 10);
+            delay_text.PrintText("Дерева. Гриби. Сніг. Персонажі.");
+            cursor.tp_Cursor(34, 11);
+            delay_text.PrintText("Усе зникає.    ");
+
+            Console.Clear();
+
+            cursor.tp_Cursor(52, 7);
+            delay_text.PrintText_s("ТЕМРЯВА    ");
+            Console.Clear();
+            cursor.tp_Cursor(52, 7);
+            delay_text.PrintText_s("Ти відкриваєш очі.  ");
+
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+
+            Console.Clear();
+
+            cursor.tp_Cursor(34, 9);
+            delay_text.PrintText("Біла стеля. Білі стіни. Тихий звук годинника.Поруч сидить незнайомий чоловік у білому халаті.");
+            cursor.tp_Cursor(34, 10);
+            delay_text.PrintText("Поруч сидить незнайомий чоловік у білому халаті.");
+            cursor.tp_Cursor(35, 11);
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            delay_text.PrintText_s("— О, нарешті прокинувся. Як почуваєшся?");
+            Console.ForegroundColor = ConsoleColor.Black;
+            cursor.tp_Cursor(34, 12);
+            delay_text.PrintText("Ти мовчиш.");
+            cursor.tp_Cursor(35, 13);
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            delay_text.PrintText_s("— Знову розповідав про грибний ліс?");
+            Console.ForegroundColor = ConsoleColor.Black;
+            cursor.tp_Cursor(34, 14);
+            delay_text.PrintText("...");
+            cursor.tp_Cursor(35, 13);
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            delay_text.PrintText_s("— До речі, ми перевірили твою кімнату. Ніяких грибів там не було.");
+            Console.ForegroundColor = ConsoleColor.Black;
+            cursor.tp_Cursor(34, 14);
+            delay_text.PrintText("...  ");
+
+            Console.Clear();
+
+            cursor.tp_Cursor(45, 7);
+            delay_text.PrintText_s("Ти дивишся на свої руки");
+            cursor.tp_Cursor(45, 8);
+            delay_text.PrintText_s("На долоні лежить маленький гриб.");
+            cursor.tp_Cursor(45, 9);
+            delay_text.PrintText_s("...");
+            Console.Clear();
+
+            cursor.tp_Cursor(45, 7);
+            delay_text.PrintText_s("КІНЕЦЬ?   ");
+
+
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+
+            cursor.tp_Cursor(45, 7);
+            delay_text.PrintText_s("ДЯКУЄМО ЗА ГРУ   ");
+            cursor.tp_Cursor(45, 8);
+            delay_text.PrintText_s("А ти впевнений, що вже прокинувся?");
+            Console.ReadKey(true);
+            Console.Clear();
+
+        }
+    }
 }
