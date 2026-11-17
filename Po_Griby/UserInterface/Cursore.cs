@@ -61,6 +61,7 @@ namespace Po_Griby.UserInterface
 
         public static void PrintText(string text, int delay = 50)
         {
+            Skip = false;
             foreach (char letter in text)
             {
                 if (Console.KeyAvailable)
