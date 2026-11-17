@@ -1,4 +1,4 @@
-﻿using Po_Griby.Gameplay;
+﻿using Po_Griby.Gameplay.Po_Griby.Gameplay;
 using Po_Griby.MapSystem;
 using System;
 using System.Collections.Generic;

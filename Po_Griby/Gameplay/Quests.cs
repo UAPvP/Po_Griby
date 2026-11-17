@@ -15,7 +15,6 @@ namespace Po_Griby.Gameplay
             public string Id { get; }
             public string Description { get; }
             public int RequiredAmount { get; }
-            public string TargetItem { get; }
 
             public bool IsCompleted(Inventory inventory)
             {
@@ -27,17 +26,16 @@ namespace Po_Griby.Gameplay
                 return inventory.Items.Count(item => item.IsQuestMushroom);
             }
 
-            public Quests(string id, string description, int requiredAmount, string targetItem)
+            public Quests(string id, string description, int requiredAmount)
             {
                 Id = id;
                 Description = description;
                 RequiredAmount = requiredAmount;
-                TargetItem = targetItem;
             }
 
             public Quests Copy()
             {
-                return new Quests(Id, Description, RequiredAmount, TargetItem);
+                return new Quests(Id, Description, RequiredAmount);
             }
         }
     }

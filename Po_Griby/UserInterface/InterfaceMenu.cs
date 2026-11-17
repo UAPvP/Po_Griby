@@ -178,7 +178,7 @@ namespace Po_Griby.UserInterface
 
                             if (player.CurrentQuest != null)
                             {
-                                Console.WriteLine("Прогрес квесту: " + player.CurrentQuest.Progress);
+                                Console.WriteLine("Прогрес квесту: " + player.CurrentQuest.GetProgress(player.PlayerInventory));
                             }
                             else
                             {
@@ -187,8 +187,7 @@ namespace Po_Griby.UserInterface
 
                             if (item.IsQuestMushroom && player.CurrentQuest != null)
                             {
-                                player.CurrentQuest.RemoveProgress();
-                                Console.WriteLine("Прогрес квесту: " + player.CurrentQuest.Progress);
+                                Console.WriteLine("Прогрес квесту: " + player.CurrentQuest.GetProgress(player.PlayerInventory));
                             }
 
                             inventory.RemoveItem(selectedIndex);

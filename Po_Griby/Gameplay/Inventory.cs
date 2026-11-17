@@ -119,16 +119,16 @@ namespace Po_Griby.Gameplay
 
         public bool RemoveQuestItems(int amount)
         {
-            int count = Items.Count(item => item.IsQuestMushroom);
+            int count = items.Count(item => item.IsQuestMushroom);
 
             if (count < amount)
                 return false;
 
-            for (int i = Items.Count - 1; i >= 0 && amount > 0; i--)
+            for (int i = items.Count - 1; i >= 0 && amount > 0; i--)
             {
-                if (Items[i].IsQuestMushroom)
+                if (items[i].IsQuestMushroom)
                 {
-                    Items.RemoveAt(i);
+                    items.RemoveAt(i);
                     amount--;
                 }
             }
