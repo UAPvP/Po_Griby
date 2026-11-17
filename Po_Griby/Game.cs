@@ -70,7 +70,7 @@ class Program
             bool isRunning = true;
             Console.Clear();
             bool shouldRender = true;
-            InterfaceMenu interfaceMenu = new InterfaceMenu(player.PlayerInventory);
+            InterfaceMenu interfaceMenu = new InterfaceMenu();
             string lastMessage = "";
 
             
@@ -206,7 +206,7 @@ class Program
                     Console.SetCursorPosition(0, 0);
                     map.Show();
 
-                    interfaceMenu.Show_I();
+                    interfaceMenu.Show_I(player);
                     interfaceMenu.Show_D();
                     interfaceMenu.Show_T(player);
 

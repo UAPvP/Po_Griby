@@ -548,7 +548,7 @@ namespace Po_Griby.Gameplay
     public class BearMiniBoss : Enemy
     {
         public BearMiniBoss(char symbol, Vector2D position) 
-            : base("Розлючений Мішутка (Міні-бос)", symbol, position, health: 60, damage: 8, attackSpeed: 1, defenseSpeed: 1, defenseShield: 10) { }
+            : base("Розлючений Мішутка (Міні-бос)", symbol, position, health: 60, damage: 8, attackSpeed: 1, defenseSpeed: 1, defenseShield: 2) { }
 
         public override void PerformTurn(Player player)
         {

@@ -6,14 +6,7 @@ namespace Po_Griby.UserInterface
 {
     internal class InterfaceMenu
     {
-        private Inventory inventory;
-
-        public InterfaceMenu(Inventory inventory)
-        {
-            this.inventory = inventory;
-        }
-
-        public IReadOnlyList<MushroomItem> Items => inventory.Items;
+        private int lastInventoryLineCount;
 
         public void Show_T(Player player)
         {
@@ -122,33 +115,49 @@ namespace Po_Griby.UserInterface
             }
         }
 
-        public void Show_I()
+        public void Show_I(Player player)
         {
-            int x = 70;
-            int y = 0;
+            const int x = 70;
+            int width = Console.WindowWidth - x;
+            if (width <= 0 || Console.WindowHeight < 2)
+                return;
 
-            Console.SetCursorPosition(x, y);
-            Console.WriteLine("====== 🎒 ІНВЕНТАР 🎒 ======");
+            Inventory inventory = player.PlayerInventory;
+            int visibleItemCount = Math.Min(inventory.Items.Count, Console.WindowHeight - 1);
+            int rowsToClear = Math.Min(
+                Console.WindowHeight,
+                Math.Max(lastInventoryLineCount, visibleItemCount) + 1);
 
-            y++;
+            for (int row = 0; row < rowsToClear; row++)
+            {
+                Console.SetCursorPosition(x, row);
+                Console.Write(new string(' ', width));
+            }
+
+            Console.SetCursorPosition(x, 0);
+            Console.Write(FitPanelLine("====== 🎒 ІНВЕНТАР 🎒 ======", width));
 
             if (inventory.Items.Count == 0)
             {
-                Console.SetCursorPosition(x, y);
-                Console.WriteLine("Інвентар порожній.");
+                Console.SetCursorPosition(x, 1);
+                Console.Write(FitPanelLine("Інвентар порожній.", width));
+                lastInventoryLineCount = 1;
                 return;
             }
 
-            for (int i = 0; i < inventory.Items.Count; i++)
+            for (int i = 0; i < visibleItemCount; i++)
             {
-                Console.SetCursorPosition(x, y);
-                Console.WriteLine($"{i + 1}. {inventory.Items[i].Name} - {inventory.Items[i].Description}");
-                y++;
+                Console.SetCursorPosition(x, i + 1);
+                string line = $"{i + 1}. {inventory.Items[i].Name} - {inventory.Items[i].Description}";
+                Console.Write(FitPanelLine(line, width));
             }
+
+            lastInventoryLineCount = visibleItemCount;
         }
 
         public void OpenInventory(Player player)
         {
+            Inventory inventory = player.PlayerInventory;
             int selectedIndex = 0;
             bool isOpen = true;
 
@@ -228,11 +237,6 @@ namespace Po_Griby.UserInterface
                                 Console.WriteLine("Немає активного квесту");
                             }
 
-                            if (item.IsQuestMushroom && player.CurrentQuest != null)
-                            {
-                                Console.WriteLine("Прогрес квесту: " + player.CurrentQuest.GetProgress(player.PlayerInventory));
-                            }
-
                             inventory.RemoveItem(selectedIndex);
 
                             if (selectedIndex >= inventory.Items.Count)
@@ -248,6 +252,14 @@ namespace Po_Griby.UserInterface
                         break;
                 }
             }
+        }
+
+        private static string FitPanelLine(string text, int width)
+        {
+            if (text.Length > width)
+                return width == 1 ? "…" : text[..(width - 1)] + "…";
+
+            return text.PadRight(width);
         }
     }
 }
