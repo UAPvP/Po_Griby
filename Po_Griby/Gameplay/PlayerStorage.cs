@@ -10,6 +10,10 @@ namespace Po_Griby.Gameplay
         public int DefenseSpeed { get; set; } = 2;
         public int DefenseShield { get; set; }
         public List<MushroomItemData> Inventory { get; set; } = new();
+        public string? CurrentQuestId { get; set; }
+        public string? CurrentQuestDescription { get; set; }
+        public int CurrentQuestRequiredAmount { get; set; }
+        public List<string> CompletedQuests { get; set; } = new();
     }
 
     public class MushroomItemData
@@ -63,7 +67,11 @@ namespace Po_Griby.Gameplay
                     Value = item.Value,
                     HealingValue = item.HealingValue,
                     IsQuestMushroom = item.IsQuestMushroom
-                }).ToList()
+                }).ToList(),
+                CurrentQuestId = player.CurrentQuest?.Id,
+                CurrentQuestDescription = player.CurrentQuest?.Description,
+                CurrentQuestRequiredAmount = player.CurrentQuest?.RequiredAmount ?? 0,
+                CompletedQuests = player.CompletedQuests.ToList()
             };
 
             File.WriteAllText(filePath, JsonSerializer.Serialize(data, Options));

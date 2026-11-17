@@ -131,7 +131,16 @@ namespace Po_Griby.MapSystem
                         new() { Symbol = 'd', Color = ConsoleColor.White, Type = "BasicNPC", Dialogue = "О, грибничкуємо? Тільки мухомори не збирай, я минулого разу після них 3 дня з деревом розмовляв" },
                         new() { Symbol = 'Y', Color = ConsoleColor.White, Type = "BasicNPC", Dialogue = "Я вже четверту годину не можу найти вихід, а він тут точно є?..." },
                         new() { Symbol = 'D', Color = ConsoleColor.DarkYellow, Type = "BasicNPC", Dialogue = "Ти теж по гриби прийшов? Хм... а я думав що всі вже пішли" },
-                        new() { Symbol = 'b', Color = ConsoleColor.DarkYellow, Type = "BasicNPC", Dialogue = "Мені треба всього 3 грибочки. Тільки не ті червоні, від них сни потім цікаві" },
+                        new()
+                        {
+                            Symbol = 'b',
+                            Color = ConsoleColor.DarkYellow,
+                            Type = "QuestNPC",
+                            Dialogue = "Мені треба всього 3 грибочки. Тільки не ті червоні, від них сни потім цікаві",
+                            QuestId = "collect_3_mushrooms",
+                            QuestDescription = "Знайди та принеси мені 3 грибочки.",
+                            QuestAmount = 3
+                        },
                         new() { Symbol = 'h', Color = ConsoleColor.DarkYellow, Type = "BasicNPC", Dialogue = "Акуратніше, куди на мій город прешся, дурень безсовісний" },
                         new() { Symbol = 'с', Color = ConsoleColor.DarkYellow, Type = "BasicNPC", Dialogue = "Мяу мяу" },
 
@@ -142,13 +151,22 @@ namespace Po_Griby.MapSystem
                         Color = ConsoleColor.DarkYellow,
                         Type = "QuestNPC",
                         Dialogue = "Схились перед Великим грибним королем, ти тут ніхто, хочеш вижити!",
-                        QuestId = "collect_5_mushrooms",
+                        QuestId = "collect_5_mushrooms_king",
                         QuestDescription = "Знайди та принеси мені 5 грибів.",
                         QuestAmount = 5
                         },
 
                         new() { Symbol = 'l', Color = ConsoleColor.DarkYellow, Type = "BasicNPC", Dialogue = "Як думаєш чи існує місце де гусиниці керують світом?..." },
-                        new() { Symbol = 'A', Color = ConsoleColor.DarkYellow, Type = "BasicNPC", Dialogue = "Нічого собі, ще один дурень зайшов у цей ліс, хочеш чогось випити? Води, зілля чи чогось міцнішого?" },
+                        new()
+                        {
+                            Symbol = 'A',
+                            Color = ConsoleColor.DarkYellow,
+                            Type = "QuestNPC",
+                            Dialogue = "Нічого собі, ще один дурень зайшов у цей ліс, хочеш чогось випити? Води, зілля чи чогось міцнішого?",
+                            QuestId = "collect_7_mushrooms",
+                            QuestDescription = "Знайди та принеси мені 7 грибів для того щоб зварити зілля",
+                            QuestAmount = 7
+                        },
                         new() { Symbol = 'T', Color = ConsoleColor.DarkYellow, Type = "BasicNPC", Dialogue = "Я просто хотів знайти білий гриб. ЧОМУ ВОНИ ВСІ ДИВЛЯТЬСЯ НА МЕНЕ??" },
                         new() { Symbol = 'S', Color = ConsoleColor.DarkYellow, Type = "BasicNPC", Dialogue = "Привіт, ти не бачив мого носа? Я його десь загубив... хоча він здається на місці..." },
 

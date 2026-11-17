@@ -158,7 +158,7 @@
       "Color": "DarkYellow",
       "Type": "QuestNPC",
       "Dialogue": "Схились перед Великим грибним королем!",
-      "QuestId": "collect_3_mushrooms",
+      "QuestId": "collect_3_mushrooms_king",
       "QuestDescription": "Знайди та принеси мені 3 грибів.",
       "QuestAmount": 3
     },
@@ -172,7 +172,7 @@
     {
       "Symbol": "A",
       "Color": "White",
-      "Type": "BasicNPC",
+      "Type": "QuestNPC",
       "Dialogue": "Чаклун:\nНічого собі, ще один дурень зайшов у цей ліс, хочег чогось випити? Води, зілья чи чогось міцнішого?",
       "QuestId": "collect_7_mushrooms",
       "QuestDescription": "Знайди та принеси мені 7 грибів для того щоб зварити зілля",

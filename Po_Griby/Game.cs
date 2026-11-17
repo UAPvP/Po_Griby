@@ -66,8 +66,6 @@ class Program
                 Console.WriteLine("На мапі немає гравця. Додайте його символ до entities-map.txt.");
                 return;
             }
-            player.PlayerInventory.Clear();
-
             logger.Log(LogLevel.Info, "Гравця знайдено, гра починається.");
             bool isRunning = true;
             Console.Clear();
@@ -163,12 +161,13 @@ class Program
                     player.PendingBattle = null;
                     bool playerWon = FightSystem.StartBattle(player, enemyToFight, player.PlayerInventory);
                     logger.Log(playerWon ? LogLevel.Info : LogLevel.Warning,
-                        playerWon ? "Гравець переміг у бою." : "Гравець програв бій.");
+                        playerWon ? "Гравець переміг у бою." :
+                        player.Health <= 0 ? "Гравець програв бій." : "Гравець утік з бою.");
                     Console.Clear();
 
                     if (playerWon)
                         map.GetEntityMap().Remove(enemyToFight);
-                    else
+                    else if (player.Health <= 0)
                     {
                         PlayerStorage.Save("player.json", player);
                         break;
@@ -199,6 +198,7 @@ class Program
                 {
                     interfaceMenu.AddMessage(map.LastMessage);
                     lastMessage = map.LastMessage;
+                    shouldRender = true;
                 }
 
                 if (shouldRender)

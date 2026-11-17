@@ -259,6 +259,15 @@ namespace Po_Griby.Gameplay
                     : item.HealingValue;
                 PlayerInventory.AddItem(new MushroomItem(item.Name, item.Type, value, item.Description, item.IsQuestMushroom));
             }
+
+            CurrentQuest = !string.IsNullOrWhiteSpace(data.CurrentQuestId) &&
+                !string.IsNullOrWhiteSpace(data.CurrentQuestDescription) &&
+                data.CurrentQuestRequiredAmount > 0
+                ? new Quests(data.CurrentQuestId, data.CurrentQuestDescription, data.CurrentQuestRequiredAmount)
+                : null;
+
+            CompletedQuests.Clear();
+            CompletedQuests.AddRange(data.CompletedQuests ?? new List<string>());
         }
 
         public void TakeDamage(int damage)

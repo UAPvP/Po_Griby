@@ -183,7 +183,7 @@
     {
       "Symbol": "U",
       "Color": "White",
-      "Type": "BasicNPC",
+      "Type": "QuestNPC",
       "Dialogue": "Чаклун:\nНічого собі, ще один дурень зайшов у цей ліс, хочег чогось випити? Води, зілья чи чогось міцнішого?",
       "QuestId": "collect_7_mushrooms",
       "QuestDescription": "Знайди та принеси мені 7 грибів для того щоб зварити зілля",
