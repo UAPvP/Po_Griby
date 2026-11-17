@@ -71,9 +71,6 @@ class Program
             logger.Log(LogLevel.Info, "Гравця знайдено, гра починається.");
             bool isRunning = true;
             Console.Clear();
-            const long tickIntervalMs = 200;
-            var gameClock = System.Diagnostics.Stopwatch.StartNew();
-            long nextTickAt = tickIntervalMs;
             bool shouldRender = true;
             InterfaceMenu interfaceMenu = new InterfaceMenu(player.PlayerInventory);
             string lastMessage = "";
@@ -84,6 +81,7 @@ class Program
             while (isRunning)
             {
                 bool playerInputReceived = false;
+                bool playerMoved = false;
                 if (Console.KeyAvailable)
                 {
                     ConsoleKey key = Console.ReadKey(true).Key;
@@ -91,10 +89,10 @@ class Program
 
                     switch (key)
                     {
-                        case ConsoleKey.W: player.MoveUp(map, logger); break;
-                        case ConsoleKey.A: player.MoveLeft(map, logger); break;
-                        case ConsoleKey.S: player.MoveDown(map, logger); break;
-                        case ConsoleKey.D: player.MoveRight(map, logger); break;
+                        case ConsoleKey.W: playerMoved = player.MoveUp(map, logger); break;
+                        case ConsoleKey.A: playerMoved = player.MoveLeft(map, logger); break;
+                        case ConsoleKey.S: playerMoved = player.MoveDown(map, logger); break;
+                        case ConsoleKey.D: playerMoved = player.MoveRight(map, logger); break;
                         case ConsoleKey.E:interfaceMenu.OpenInventory(player);shouldRender = true; break;
                         case ConsoleKey.Q:
                             logger.Log(LogLevel.Info, "Гравець вийшов з гри.");
@@ -146,6 +144,19 @@ class Program
                     }
                 }
 
+                if (playerMoved)
+                {
+                    MovingCharacter[] movingEntities = map.GetEntityMap().Entities
+                        .OfType<MovingCharacter>()
+                        .ToArray();
+                    logger.Log(LogLevel.Debug, $"Хід гравця: оновлення сутностей ({movingEntities.Length}).");
+
+                    foreach (MovingCharacter entity in movingEntities)
+                        entity.Move(map, player, logger);
+
+                    shouldRender = true;
+                }
+
                 if (player.PendingBattle != null)
                 {
                     Enemy enemyToFight = player.PendingBattle;
@@ -184,25 +195,6 @@ class Program
                     break;
                 }
 
-                bool tickElapsed = gameClock.ElapsedMilliseconds >= nextTickAt;
-                if (tickElapsed)
-                {
-                    MovingCharacter[] movingEntities = map.GetEntityMap().Entities
-                        .OfType<MovingCharacter>()
-                        .ToArray();
-                    logger.Log(LogLevel.Debug, $"Тік світу: оновлення сутностей ({movingEntities.Length}).");
-
-                    foreach (MovingCharacter entity in movingEntities)
-                    {
-                        entity.Move(map, player, logger);
-                    }
-
-                    // Один тик за цикл: якщо обработка задержалась (например, во время боя),
-                    // не пытаемся проиграть накопившиеся тики подряд.
-                    nextTickAt = gameClock.ElapsedMilliseconds + tickIntervalMs;
-
-                    shouldRender = true;
-                }
                 if (!string.IsNullOrWhiteSpace(map.LastMessage) && map.LastMessage != lastMessage)
                 {
                     interfaceMenu.AddMessage(map.LastMessage);
@@ -221,7 +213,7 @@ class Program
                     shouldRender = false;
                 }
 
-                if (playerInputReceived || tickElapsed)
+                if (playerInputReceived)
                     PlayerStorage.Save("player.json", player);
 
                 Thread.Sleep(10);
