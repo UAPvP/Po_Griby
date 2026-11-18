@@ -10,17 +10,17 @@ namespace Po_Griby.UserInterface
 
         public void Show_T(Player player)
         {
-            Console.SetCursorPosition(70, 10);
+            Console.SetCursorPosition(70, 20);
             Console.WriteLine("====== 📜 ЗАВДАННЯ 📜 ======");
 
-            for (int i = 10; i <= 12; i++)
+            for (int i = 21; i <= 29; i++)
             {
                 Console.SetCursorPosition(70, i);
                 Console.Write(new string(' ', Console.WindowWidth - 72));
             }
             
 
-            Console.SetCursorPosition(70, 11);
+            Console.SetCursorPosition(70, 21);
 
             if (player.CurrentQuest == null)
             {
@@ -30,7 +30,7 @@ namespace Po_Griby.UserInterface
             {
                 Console.WriteLine(player.CurrentQuest.Description);
 
-                Console.SetCursorPosition(70, 12);
+                Console.SetCursorPosition(70, 22);
 
                 int progress = player.CurrentQuest.GetProgress(player.PlayerInventory);
 
